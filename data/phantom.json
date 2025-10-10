@@ -1,0 +1,96 @@
+[
+  {
+    "codice": "FMVA001",
+    "descrizione": "MOTORE BELIMO",
+    "tipo": "phantom",
+    "articoli_fissi": [
+      { "codice": "123EXAMPLE", "quantita": 1 }
+    ],
+    "varianti": {
+      "0_10": {
+        "descrizione": "40Nm ON/OFF per Refrigera 22/28 mm",
+        "articoli": [
+          { "codice": "25C5140", "quantita": 2 },
+          { "codice": "25C1130", "quantita": 1 }
+        ]
+      },
+      "0_11": {
+        "descrizione": "40Nm MOD. per Refrigera 22/28 mm",
+        "articoli": [
+          { "codice": "25C5150", "quantita": 2 },
+          { "codice": "25C1140", "quantita": 1 }
+        ]
+      },
+      "0_12": {
+        "descrizione": "60Nm ON/OFF per Refrigera 35/42 mm",
+        "articoli": [
+          { "codice": "25C5160", "quantita": 3 },
+          { "codice": "25C1150", "quantita": 2 }
+        ]
+      }
+    }
+  },
+  {
+    "codice": "FKIT002",
+    "descrizione": "KIT PRESSOSTATO COMPLETO",
+    "tipo": "phantom",
+    "articoli_fissi": [
+      { "codice": "25C0610", "quantita": 1 },
+      { "codice": "25C1100", "quantita": 2 }
+    ],
+    "varianti": {
+      "HP01": {
+        "descrizione": "Alta Pressione R134a",
+        "articoli": [
+          { "codice": "25C5100", "quantita": 1 },
+          { "codice": "25C5110", "quantita": 2 }
+        ]
+      },
+      "LP01": {
+        "descrizione": "Bassa Pressione R134a",
+        "articoli": [
+          { "codice": "25C5120", "quantita": 1 },
+          { "codice": "25C5130", "quantita": 2 }
+        ]
+      },
+      "HP02": {
+        "descrizione": "Alta Pressione R290",
+        "articoli": [
+          { "codice": "25C5140", "quantita": 1 },
+          { "codice": "25C5150", "quantita": 3 }
+        ]
+      }
+    }
+  },
+  {
+    "codice": "FASS003",
+    "descrizione": "ASSIEME VALVOLA COMPLETO",
+    "tipo": "phantom",
+    "articoli_fissi": [
+      { "codice": "15C7550", "quantita": 1 }
+    ],
+    "varianti": {
+      "2W10": {
+        "descrizione": "2 Vie DN10",
+        "articoli": [
+          { "codice": "FMVA001", "quantita": 1, "tipo": "phantom" },
+          { "codice": "25C110E", "quantita": 2 }
+        ]
+      },
+      "2W15": {
+        "descrizione": "2 Vie DN15",
+        "articoli": [
+          { "codice": "FMVA001", "quantita": 1, "tipo": "phantom" },
+          { "codice": "25C1110", "quantita": 2 }
+        ]
+      },
+      "3W10": {
+        "descrizione": "3 Vie DN10",
+        "articoli": [
+          { "codice": "FMVA001", "quantita": 1, "tipo": "phantom" },
+          { "codice": "25C1112", "quantita": 3 }
+        ]
+      }
+    }
+  }
+]

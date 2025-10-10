@@ -1,0 +1,252 @@
+[
+  {
+    "codice": "25C0610",
+    "descrizione": "MECC. VAL. ATT. CARICA PS140 BAR (OLD)",
+    "categoria": "VESSELS"
+  },
+  {
+    "codice": "25C061B",
+    "descrizione": "MECC. VAL. ATT.CARICA CO2/R290  PS140BAR",
+    "categoria": "VESSELS"
+  },
+  {
+    "codice": "15C7550",
+    "descrizione": "SCAMB ALFA LAVAL AXP82-200",
+    "categoria": "PHE"
+  },
+  {
+    "codice": "25C1100",
+    "descrizione": "Tappo Ottone val sfera 10-18 mm",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C110E",
+    "descrizione": "Tappo Ottone val sf. BMV12 + guarnizione",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C1110",
+    "descrizione": "Tappo Ottone val sf. BMV18 + guarnizione",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C1112",
+    "descrizione": "Tappo Ottone val sf. BMV22 + guarnizione",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C1114",
+    "descrizione": "Tappo Ottone val sf. BMV28 + guarnizione",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C1116",
+    "descrizione": "Tappo Ottone val sf. BMV35 + guarnizione",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C1118",
+    "descrizione": "Tappo Ottone val sf. BMV42 + guarnizione",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C111A",
+    "descrizione": "Tappo Ottone val sf. BMV54 + guarnizione",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C111C",
+    "descrizione": "Tappo Ottone val sf. BMV76 + guarnizione",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C111E",
+    "descrizione": "Tappo Ottone val sf. BMV108 + guarnizione",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C1120",
+    "descrizione": "Tappo Ottone val sf. BMV133 + guarnizione",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C1122",
+    "descrizione": "Tappo Ottone val sf. BMV159 + guarnizione",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C1130",
+    "descrizione": "Tappo Ottone val sfera 22 mm",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C1140",
+    "descrizione": "Tappo Ottone val sfera 28 mm",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C1150",
+    "descrizione": "Tappo Ottone val sfera 35 mm",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C1160",
+    "descrizione": "Tappo Ottone val sfera 42 mm",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C1170",
+    "descrizione": "Tappo Ottone val sfera 54 mm",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C1180",
+    "descrizione": "Tappo Ottone val sfera 64 mm",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C1190",
+    "descrizione": "Tappo Ottone val sfera 76 mm",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C11A0",
+    "descrizione": "Tappo Ottone val sfera 89 mm",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C11B0",
+    "descrizione": "Tappo Ottone val sfera 108 mm",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C11C0",
+    "descrizione": "Tappo Ottone val sfera 133 mm",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C11D0",
+    "descrizione": "Tappo Ottone val sfera 159 mm",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5100",
+    "descrizione": "CURVA 90 RAME 10 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5110",
+    "descrizione": "CURVA 90 RAME 12 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5120",
+    "descrizione": "CURVA 90 RAME 15 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5130",
+    "descrizione": "CURVA 90 RAME 18 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5140",
+    "descrizione": "CURVA 90 RAME 22 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5150",
+    "descrizione": "CURVA 90 RAME 28 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5160",
+    "descrizione": "CURVA 90 RAME 35 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5170",
+    "descrizione": "CURVA 90 RAME 42 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5180",
+    "descrizione": "CURVA 90 RAME 54 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5190",
+    "descrizione": "CURVA 90 RAME 64 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C51A0",
+    "descrizione": "CURVA 90 RAME 76 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C51B0",
+    "descrizione": "CURVA 90 RAME 89 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C51C0",
+    "descrizione": "CURVA 90 RAME 108 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C51D0",
+    "descrizione": "CURVA 90 RAME 133 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C51E0",
+    "descrizione": "CURVA 90 RAME 159 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5200",
+    "descrizione": "CURVA 45 RAME 10 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5210",
+    "descrizione": "CURVA 45 RAME 12 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5220",
+    "descrizione": "CURVA 45 RAME 15 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5230",
+    "descrizione": "CURVA 45 RAME 18 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5240",
+    "descrizione": "CURVA 45 RAME 22 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5250",
+    "descrizione": "CURVA 45 RAME 28 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5260",
+    "descrizione": "CURVA 45 RAME 35 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5270",
+    "descrizione": "CURVA 45 RAME 42 MM",
+    "categoria": "MINUTERIA"
+  },
+  {
+    "codice": "25C5280",
+    "descrizione": "CURVA 45 RAME 54 MM",
+    "categoria": "MINUTERIA"
+  }
+]

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dipendenze Attive</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dipendenze.css">
+</head>
+<body>
+    <div class="dep-container">
+        
+    <div class="dep-header">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+            <a href="index.html" class="btn-back">← Torna alla BoM</a>
+            <div style="display: flex; gap: 12px;">
+                <button id="btnNewDep" class="btn-primary-dep">➕ Nuova Dipendenza</button>
+                <button id="btnExportJSON" class="btn-export-dep">💾 Esporta JSON</button>
+            </div>
+        </div>
+        <h1>Dipendenze Attive</h1>
+        <div class="subtitle">Regole automatiche per l'aggiunta di articoli correlati</div>
+        <div class="dep-stats">
+            <div class="stat-item">
+                <strong id="totalDeps">0</strong> regole totali
+            </div>
+            <div class="stat-item">
+                <strong id="visibleDeps">0</strong> visibili
+            </div>
+        </div>
+        
+        <!-- Filtro ricerca -->
+        <div class="dep-filter">
+            <input type="text" id="filterInput" class="filter-input" placeholder="Cerca per codice o descrizione (es. CKB, pressostato...)">
+        </div>
+    </div>
+
+    <div class="dep-list" id="depList">
+        <!-- Le dipendenze verranno caricate qui -->
+    </div>
+
+    <div class="empty-state" id="emptyState" style="display: none;">
+        <div style="font-size: 48px; margin-bottom: 16px;">📋</div>
+        <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">Nessuna dipendenza configurata</div>
+        <div style="font-size: 14px;">Clicca "Nuova Dipendenza" per iniziare</div>
+    </div>
+
+    <!-- Modal per creare/modificare dipendenza -->
+    <div id="depModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content-dep">
+            <div class="modal-header-dep">
+                <h2 id="modalTitle">Nuova Dipendenza</h2>
+                <button id="btnCloseModal" class="btn-close-modal">✕</button>
+            </div>
+            
+            <form id="depForm" class="dep-form">
+                <!-- ID (auto-generato) -->
+                <div class="form-group-dep">
+                    <label>ID</label>
+                    <input type="text" id="depId" class="input-dep" readonly style="background: var(--bg-tertiary); cursor: not-allowed;">
+                </div>
+
+                <!-- Nome -->
+                <div class="form-group-dep">
+                    <label>Nome della regola</label>
+                    <input type="text" id="depNome" class="input-dep" placeholder="es. Pressostati → Cavo elettrico" required>
+                </div>
+
+                <!-- Trigger (multi-select con ricerca) -->
+                <div class="form-group-dep">
+                    <label>Articoli Trigger (SE aggiungi questi)</label>
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <button type="button" id="btnImportTriggers" class="btn-import-list">📋 Importa lista</button>
+                        <span style="font-size: 11px; color: var(--text-tertiary); align-self: center;">
+                            (separa con ";")
+                        </span>
+                    </div>
+                    <div class="trigger-container">
+                        <div class="search-articolo-wrapper">
+                            <input type="text" id="searchTrigger" class="input-dep" placeholder="Cerca articolo per codice o descrizione...">
+                            <div id="triggerResults" class="search-results-dep"></div>
+                        </div>
+                        <div id="selectedTriggers" class="selected-items">
+                            <!-- Articoli selezionati appariranno qui -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Target (multi-select con ricerca + ratio individuale) -->
+                <div class="form-group-dep">
+                    <label>Articoli Target (ALLORA aggiungi questi)</label>
+                    <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                        <button type="button" id="btnImportTargets" class="btn-import-list">📋 Importa lista</button>
+                        <span style="font-size: 11px; color: var(--text-tertiary); align-self: center;">
+                            (separa con ";")
+                        </span>
+                    </div>
+                    <div class="search-articolo-wrapper">
+                        <input type="text" id="searchTarget" class="input-dep" placeholder="Cerca articolo per codice o descrizione...">
+                        <div id="targetResults" class="search-results-dep"></div>
+                    </div>
+                    <div id="selectedTargets" class="selected-items">
+                        <!-- Articoli target selezionati appariranno qui -->
+                    </div>
+                </div>
+
+                <!-- Sottoassieme destinazione -->
+                <div class="form-group-dep">
+                    <label>Sottoassieme di destinazione</label>
+                    <select id="depSottoassieme" class="input-dep" required>
+                        <option value="">-- Seleziona sottoassieme --</option>
+                    </select>
+                </div>
+
+                <!-- Ratio -->
+                <div class="form-group-dep">
+                    <label>Ratio (moltiplicatore)</label>
+                    <input type="number" id="depRatio" class="input-dep" value="1" min="0.1" step="0.1" required>
+                    <small style="color: var(--text-tertiary); font-size: 12px;">Es. 1 = 1:1, 2 = ogni trigger aggiunge 2x target</small>
+                </div>
+
+                <!-- Override e Dedup -->
+                <div class="form-group-dep" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                        <input type="checkbox" id="depOverride" style="width: auto;">
+                        <span>Override</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 8px;">
+                        <span>Dedup:</span>
+                        <select id="depDedup" class="input-dep" style="flex: 1;">
+                            <option value="sum">sum</option>
+                            <option value="max">max</option>
+                            <option value="min">min</option>
+                        </select>
+                    </label>
+                </div>
+
+                <!-- Bottoni -->
+                <div class="modal-actions-dep">
+                    <button type="button" id="btnCancelModal" class="btn-cancel-dep">Annulla</button>
+                    <button type="submit" class="btn-save-dep">💾 Salva</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+
+    </div>
+
+        <div class="dep-list" id="depList">
+            <!-- Le dipendenze verranno caricate qui -->
+        </div>
+
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div style="font-size: 48px; margin-bottom: 16px;">📋</div>
+            <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">Nessuna dipendenza configurata</div>
+            <div style="font-size: 14px;">Aggiungi regole nel file dipendenze.json</div>
+        </div>
+    </div>
+
+
+    <!-- Modal import lista codici -->
+<div id="importModal" class="modal-overlay" style="display: none;">
+    <div class="import-modal-content">
+        <div class="import-header">
+            <h3>Importa lista codici</h3>
+            <button id="btnCloseImport" class="btn-close-modal">✕</button>
+        </div>
+        <div class="import-body">
+            <label style="display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 8px;">
+                Incolla i codici separati da <strong>;</strong> (punto e virgola)
+            </label>
+            <textarea id="importTextarea" class="import-textarea" placeholder="Es: 40C103F; 40C103G; 25C3100; 25C310"></textarea>
+            <div id="importPreview" class="import-preview"></div>
+        </div>
+        <div class="import-actions">
+            <button id="btnCancelImport" class="btn-cancel-dep">Annulla</button>
+            <button id="btnConfirmImport" class="btn-save-dep">Importa</button>
+        </div>
+    </div>
+</div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/dipendenze.js"></script>
+</body>
+</html>

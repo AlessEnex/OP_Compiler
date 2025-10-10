@@ -1,0 +1,51 @@
+[
+  {
+    "id": "DEP001",
+    "nome": "Pressostati → Cavo elettrico",
+    "trigger": [
+      "40C103F",
+      "40C103G"
+    ],
+    "target": "95E0030",
+    "sottoassieme_destinazione": "05",
+    "ratio": 1,
+    "override": true,
+    "dedup": "sum"
+  },
+  {
+    "id": "DEP002",
+    "nome": "Componente → Cavo 40C2640",
+    "trigger": [
+      "25C3100",
+      "25C310"
+    ],
+    "target": "40C2640",
+    "sottoassieme_destinazione": "05",
+    "ratio": 1,
+    "override": true,
+    "dedup": "sum"
+  },
+  {
+    "id": "DEP003",
+    "nome": "CD0",
+    "trigger": [
+      "20C401I",
+      "20C401Q",
+      "20C401H",
+      "20C401J",
+      "20C4010",
+      "20C401K",
+      "20C401L",
+      "20C401M",
+      "20C401N",
+      "20C401O",
+      "20C401P",
+      "20C401G"
+    ],
+    "target": "40C095B",
+    "sottoassieme_destinazione": "SAME",
+    "ratio": 1,
+    "override": true,
+    "dedup": "sum"
+  }
+]

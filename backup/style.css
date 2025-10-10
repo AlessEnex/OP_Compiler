@@ -1,0 +1,202 @@
+/* =========================================================
+   NORD–SWISS MINIMAL UI
+   Tipografico, scandinavo, colori tenui, no icone
+   ========================================================= */
+
+/* ---------- Reset sobrio ---------- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+img, svg { display: block; max-width: 100%; }
+
+/* ---------- Token cromatici ---------- */
+:root{
+  /* Fondo chiaro non ottico */
+  --bg: #f7f7f5;            /* canvas */
+  --surface: #ffffff;       /* blocchi */
+  --surface-alt: #f2f3f4;   /* sezioni alternate */
+
+  /* Tipografia */
+  --text: #101214;          /* principale, quasi-nero */
+  --text-2: #6a7078;        /* secondario */
+  --text-3: #9aa1a9;        /* terziario */
+
+  /* Linee / hairline */
+  --line: #e4e6ea;
+  --line-strong: #d8dbe0;
+
+  /* Accento (solo focus/link), freddo e tenue */
+  --accent: #6a8abf;
+
+  /* Raggi e ritmo */
+  --radius: 8px;
+  --space-1: 6px;
+  --space-2: 10px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+
+  /* Transizioni */
+  --t: 160ms;
+  --ease: cubic-bezier(.2,.6,.2,1);
+}
+
+/* ---------- Base tipografica ---------- */
+body{
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, system-ui, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: .005em;
+}
+
+h1,h2,h3{
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+h1{ font-size: clamp(22px, 3.2vw, 28px); }
+h2{ font-size: clamp(18px, 2.6vw, 22px); }
+h3{ font-size: clamp(16px, 2.2vw, 18px); }
+
+p,li{ color: var(--text); font-size: 15px; }
+small, .muted{ color: var(--text-2); font-size: 13px; }
+.caption{ color: var(--text-3); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
+
+/* Link: solo segno tipografico */
+a{
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--t) var(--ease), color var(--t) var(--ease);
+}
+a:hover{ color: var(--text-2); border-bottom-color: var(--line-strong); }
+
+/* Focus sobrio */
+:focus-visible{
+  outline: 2px solid color-mix(in oklab, var(--accent) 55%, white 0%);
+  outline-offset: 2px;
+}
+
+/* ---------- Layout ---------- */
+.container{ max-width: 1120px; margin: 0 auto; padding: 0 var(--space-3); }
+.stack > * + * { margin-top: var(--space-3); }        /* spaziatura verticale pulita */
+.cluster{ display: flex; gap: var(--space-2); align-items: center; flex-wrap: wrap; }
+
+/* ---------- Blocchi / card ---------- */
+.card{
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--space-4);
+}
+.section{
+  background: var(--surface-alt);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: var(--space-4) 0;
+}
+
+/* ---------- Tabelle minimal ---------- */
+.table{
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.table th{
+  text-align: left;
+  font-weight: 600;
+  color: var(--text-2);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--line);
+  letter-spacing: .02em;
+}
+.table td{
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
+}
+.table tr:last-child td{ border-bottom: 0; }
+
+/* ---------- Liste a righe (senza scatole) ---------- */
+.list{ display: grid; gap: 0; }
+.list > *{
+  display: grid;
+  grid-template-columns: 140px 1fr auto;
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--line);
+}
+.list > *:last-child{ border-bottom: 0; }
+
+/* ---------- Input tipografici (solo riga sotto) ---------- */
+.input, input[type="text"], input[type="number"], select{
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line);
+  padding: 6px 2px;
+  font-size: 14px;
+  transition: border-color var(--t) var(--ease), background var(--t) var(--ease);
+}
+.input::placeholder{ color: var(--text-3); }
+.input:focus, input[type="text"]:focus, input[type="number"]:focus, select:focus{
+  outline: none;
+  border-bottom: 1px solid var(--accent);
+  background: transparent;
+}
+
+/* number senza freccette */
+input[type="number"]{-moz-appearance:textfield;}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+
+/* ---------- Pulsanti tipografici (no scatola) ---------- */
+.button{
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 4px 6px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  color: var(--text);
+  border-bottom: 1px solid transparent;
+  cursor: pointer;
+  transition: color var(--t) var(--ease), border-color var(--t) var(--ease), transform 80ms ease;
+}
+.button:hover{ color: var(--text-2); border-bottom-color: var(--line-strong); }
+.button:active{ transform: translateY(1px); }
+
+/* Variante “pill” discreta (solo quando serve evidenziare) */
+.button--pill{
+  padding: 6px 10px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  transition: background var(--t) var(--ease), border-color var(--t) var(--ease);
+}
+.button--pill:hover{ background: #f9f9f8; border-color: var(--line-strong); }
+
+/* ---------- Tag/etichetta ---------- */
+.tag{
+  display:inline-block;
+  padding: 2px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 11px;
+  color: var(--text-2);
+}
+
+/* ---------- Spazi helper ---------- */
+.mt-1{ margin-top: var(--space-1); }
+.mt-2{ margin-top: var(--space-2); }
+.mt-3{ margin-top: var(--space-3); }
+.mt-4{ margin-top: var(--space-4); }
+.mb-2{ margin-bottom: var(--space-2); }
+.mb-3{ margin-bottom: var(--space-3); }
+
+/* ---------- Media ---------- */
+@media (max-width: 768px){
+  .container{ padding: 0 var(--space-2); }
+  .list > *{ grid-template-columns: 1fr; gap: var(--space-1); }
+}

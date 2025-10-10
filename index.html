@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BoM Builder</title>
+    <link rel="stylesheet" href="css/style.css">
+
+
+
+</head>
+<body>
+    <!-- Form iniziale per setup commessa -->
+    <div id="setupForm" class="setup-container">
+        <div class="setup-card">
+            <h1>Nuova Distinta Base</h1>
+            <form id="commessaForm">
+                <div class="form-group">
+                    <label for="anno">Anno</label>
+                    <input type="number" id="anno" value="2025" min="2020" max="2099" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="commessa">Numero Commessa (4 cifre)</label>
+                    <input type="text" id="commessa" placeholder="0001" maxlength="4" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="macchina">Macchina Padre</label>
+                    <select id="macchina" required>
+                        <option value="">-- Seleziona macchina --</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn-primary">Inizia</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Area principale applicazione (nascosta all'inizio) -->
+    <div id="mainApp" class="main-app" style="display: none;">
+        <!-- Header con info commessa -->
+        <header class="app-header">
+            <div class="header-content">
+                <h1>BoM Builder</h1>
+                <div class="commessa-info">
+                    <span id="headerCommessa"></span>
+                    <span id="headerMacchina"></span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <button id="btnImportCSV" class="btn-import-csv">Importa CSV</button>
+                    <a href="dipendenze.html" class="link-dipendenze">
+                        Dipendenze <span style="font-size: 11px;">↗</span>
+                    </a>
+                    <button id="btnExport" class="btn-export">Esporta Excel</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Area sottoassiemi -->
+        <main class="app-main">
+            <div class="sottoassiemi-container" id="sottoassiemiContainer">
+                <!-- I sottoassiemi verranno inseriti dinamicamente qui -->
+            </div>
+        </main>
+    </div>
+
+<!-- Modal conferma eliminazione -->
+    <div id="confirmModal" class="modal-overlay" style="display: none;">
+        <div class="confirm-modal-content">
+            <div class="confirm-icon">⚠️</div>
+            <h3 id="confirmTitle">Conferma eliminazione</h3>
+            <p id="confirmMessage">Sei sicuro di voler procedere?</p>
+            <div class="confirm-actions">
+                <button id="btnCancelConfirm" class="btn-cancel-confirm">Annulla</button>
+                <button id="btnConfirmDelete" class="btn-confirm-delete">Elimina</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Import CSV -->
+    <div id="csvModal" class="modal-overlay" style="display: none;">
+        <div class="csv-modal-content">
+            <div class="csv-modal-header">
+                <h2>Importa articoli da CSV</h2>
+                <button id="btnCloseCsvModal" class="btn-close-modal">✕</button>
+            </div>
+            
+            <div class="csv-modal-body">
+                <div class="csv-instructions">
+                <p>Formato CSV richiesto (con header):</p>
+                <code>sottoassieme;codice;quantita</code>
+                <p style="margin-top: 8px; font-size: 12px; color: var(--text-secondary);">
+                    Esempio: <code>05;45C345J;5</code>
+                </p>
+            </div>
+                
+                <!-- Upload area -->
+                <div id="csvDropZone" class="csv-drop-zone">
+                    <div class="drop-zone-content">
+                        <div style="font-size: 32px; margin-bottom: 8px;"></div>
+                        <div style="font-size: 14px; font-weight: 600; margin-bottom: 4px;">
+                            Trascina qui il file CSV
+                        </div>
+                        <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
+                            oppure
+                        </div>
+                        <input type="file" id="csvFileInput" accept=".csv" style="display: none;">
+                        <button id="btnSelectCSV" class="btn-select-file">Seleziona file</button>
+                    </div>
+                </div>
+                
+                <!-- Preview area -->
+                <div id="csvPreview" class="csv-preview" style="display: none;">
+                    <div class="preview-header">
+                        <span id="csvFileName"></span>
+                        <button id="btnClearCSV" class="btn-clear">✕</button>
+                    </div>
+                    <div id="csvPreviewContent" class="preview-content"></div>
+                    <div id="csvStats" class="csv-stats"></div>
+                </div>
+            </div>
+            
+            <div class="csv-modal-actions">
+                <button id="btnCancelCSV" class="btn-cancel-confirm">Annulla</button>
+                <button id="btnImportCSV" class="btn-confirm-delete" style="background: var(--text-primary);">Importa</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/bomManager.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

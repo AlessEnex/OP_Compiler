@@ -1,0 +1,58 @@
+[
+  {
+    "codice": "00E00030",
+    "descrizione": "01 - Drava Series 2020"
+  },
+  {
+    "codice": "00E00940",
+    "descrizione": "02 - Neva Series 2020"
+  },
+  {
+    "codice": "00E00900",
+    "descrizione": "03 - Elba Series 2020"
+  },
+  {
+    "codice": "00E00040",
+    "descrizione": "04 - LT Unit 2020 (AT / Abbattitori)"
+  },
+  {
+    "codice": "00E00100",
+    "descrizione": "07A - AirHeat 2.0 Series"
+  },
+  {
+    "codice": "00E00020",
+    "descrizione": "08 - Senna Series 2021"
+  },
+  {
+    "codice": "00E00123",
+    "descrizione": "08_1 SENNA-XS Series"
+  },
+  {
+    "codice": "00E00050",
+    "descrizione": "09 - Ejector KIT Series"
+  },
+        {
+            "codice": "00E01111",
+            "descrizione": "YUKON"
+        },
+        {
+            "codice": "00E01115",
+            "descrizione": "MINIBOOSTER – TAGO"
+        },
+        {
+            "codice": "00E01600",
+            "descrizione": "AIRHEAT 2.0"
+        },
+        {
+            "codice": "00E01250",
+            "descrizione": "GEOHEAT 48/ETHERNET"
+        },
+        {
+            "codice": "00E01240",
+            "descrizione": "GEOHEAT 24/ETHERNET"
+        },
+  {
+    "codice": "00E00060",
+    "descrizione": "10 - Moduli Aggiuntivi"
+  }
+]
