@@ -520,23 +520,28 @@ a:hover{text-decoration:underline;text-decoration-thickness:1px}
     margin-top: 2px;
 }
 
+/* Bottone Export — stile Swiss minimal */
+/* Bottone Export Excel — stile Swiss minimal */
 .btn-export {
-  padding: 8px 14px;
-  background: #008d2b;         /* grafite Apple flat */
-  color: #f5f5f7;              /* testo chiaro e morbido */
-  border: none;
-  border-radius: 8px;
+  font-family: 'Aperçu', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  padding: 7px 18px;
+  background: none;        /* blu notte profondo */
+  color:var(--text-primary);
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s ease, color 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .btn-export:hover {
-  background: #3a3a3c;         /* schiarimento al passaggio */
-  transform: translateY(-1px);
+  background: #1e293b;        /* tono leggermente più chiaro */
+  color: #ffffff;
 }
+
 
 .btn-export:active {
   transform: translateY(0);
@@ -662,24 +667,28 @@ a:hover{text-decoration:underline;text-decoration-thickness:1px}
 }
 
 
-/* Bottone Import CSV */
+/* Bottone Import CSV — stile Swiss minimal */
 .btn-import-csv {
-    padding: 8px 16px;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-sm);
+    font-family: 'Aperçu', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    padding: 7px 18px;
+    background: transparent;
     color: var(--text-primary);
-    font-size: 14px;
-    font-weight: 600;
+    border: 0px solid var(--text-secondary);
+    border-radius: 4px;
     cursor: pointer;
-    transition: all 0.18s ease;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 }
 
 .btn-import-csv:hover {
-    background: var(--bg-elevated);
-    border-color: var(--separator);
-    transform: translateY(-1px);
+    color: var(--text-contrast, #fff);
+    background: var(--text-primary);
+    border-color: var(--text-primary);
 }
+
 
 /* Modal CSV */
 .csv-modal-content {
