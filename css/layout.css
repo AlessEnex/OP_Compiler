@@ -1,0 +1,161 @@
+/* =========================================================
+   LAYOUT - Header, Main App, Setup Screen
+   ========================================================= */
+
+/* ---- MAIN APP ---- */
+
+.main-app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-main {
+    flex: 1;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: var(--spacing-lg);
+    width: 100%;
+}
+
+/* ---- HEADER ---- */
+
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: saturate(140%) blur(16px);
+    border-bottom: 1px solid var(--border-color);
+    padding: 10px var(--spacing-xl);
+}
+
+.header-content {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex: 1;
+}
+
+.header-content h1 {
+    font-size: var(--fs-18);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.commessa-info {
+    display: flex;
+    gap: var(--spacing-lg);
+    font-size: var(--fs-13);
+    color: var(--text-secondary);
+}
+
+/* ---- SETUP CARD ---- */
+
+.setup-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-xl);
+}
+
+.setup-card {
+    width: 100%;
+    max-width: 520px;
+    padding: 32px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+}
+
+.setup-card h1 {
+    font-size: var(--fs-22, 22px);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Setup footer con link dipendenze */
+.setup-footer {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.link-setup-dipendenze {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-secondary);
+    font-size: var(--fs-13);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.18s ease, transform 0.18s ease;
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
+}
+
+.link-setup-dipendenze:hover {
+    color: var(--accent-blue);
+    background: var(--bg-tertiary);
+    text-decoration: none;
+    transform: translateX(2px);
+}
+
+.link-setup-dipendenze:active {
+    transform: translateX(0);
+}
+
+/* Header nella home page */
+.setup-header {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    z-index: 10;
+}
+
+.link-dipendenze-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-secondary);
+    font-size: var(--fs-14);
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.18s ease, transform 0.18s ease;
+    padding: 8px 16px;
+    background: none;
+    border: 0px solid var(--border-color);
+    border-radius: var(--radius-sm);
+}
+
+.link-dipendenze-home:hover {
+    color: var(--text-primary);
+    background: none;
+    border-color: var(--separator);
+    text-decoration: none;
+    transform: translateX(2px);
+}
+
+.link-dipendenze-home:active {
+    transform: translateX(0);
+}

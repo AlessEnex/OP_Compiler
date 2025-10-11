@@ -881,3 +881,228 @@ a:hover{text-decoration:underline;text-decoration-thickness:1px}
 .csv-modal-actions button {
     flex: 1;
 }
+
+/* Aggiungi questo nel tuo file CSS (style.css) */
+
+/* Barra filtro sottoassiemi */
+.filter-bar {
+    padding: 16px 24px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.filter-wrapper {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto 8px;
+}
+
+.filter-input-sottoassiemi {
+    width: 100%;
+    padding: 12px 40px 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: all 0.2s;
+}
+
+.filter-input-sottoassiemi:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
+}
+
+.btn-clear-filter {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.btn-clear-filter:hover {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.filter-stats {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-secondary);
+}
+
+.filter-stats strong {
+    color: var(--accent-blue);
+    font-weight: 600;
+}
+
+/* Sottoassieme nascosto dal filtro */
+.sottoassieme-card.filtered-hidden {
+    display: none;
+}
+
+/* Animazione smooth per il filtro */
+.sottoassieme-card {
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.sottoassieme-card.filtering {
+    opacity: 0.5;
+    transform: scale(0.98);
+}
+
+/* ==================== FILTRO SOTTOASSIEMI ==================== */
+/* ==================== FILTRO SOTTOASSIEMI - ULTRA MINIMAL ==================== */
+
+.filter-bar {
+    padding: 8px 24px;
+    background: transparent;
+    border-bottom: none;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.filter-wrapper {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.filter-wrapper:hover,
+.filter-wrapper:focus-within {
+    width: 280px;
+}
+
+.filter-input-sottoassiemi {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: none;
+    border-radius: 18px;
+    font-size: 13px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    text-indent: -9999px;
+}
+
+.filter-wrapper:hover .filter-input-sottoassiemi,
+.filter-wrapper:focus-within .filter-input-sottoassiemi {
+    padding-left: 40px;
+    padding-right: 40px;
+    text-indent: 0;
+    cursor: text;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+}
+
+.filter-wrapper:focus-within .filter-input-sottoassiemi {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.08);
+}
+
+.filter-input-sottoassiemi:focus {
+    outline: none;
+}
+
+.filter-input-sottoassiemi::placeholder {
+    color: transparent;
+}
+
+.filter-wrapper:hover .filter-input-sottoassiemi::placeholder,
+.filter-wrapper:focus-within .filter-input-sottoassiemi::placeholder {
+    color: var(--text-tertiary);
+}
+
+/* Icona lente - flat moderna */
+.filter-wrapper::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Ccircle cx='11' cy='11' r='7' stroke='%230A84FF' stroke-width='2.5' stroke-linecap='round'/%3E%3Cpath d='M16.5 16.5L21 21' stroke='%230A84FF' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    transition: all 0.35s;
+    z-index: 1;
+}
+
+.filter-wrapper:hover::before {
+    left: 12px;
+}
+
+.btn-clear-filter {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%) scale(0.8);
+    background: var(--bg-tertiary);
+    border: none;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 50%;
+    transition: all 0.25s;
+    opacity: 0;
+    pointer-events: none;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filter-wrapper:focus-within .btn-clear-filter {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(-50%) scale(1);
+}
+
+.btn-clear-filter:hover {
+    background: var(--accent-blue);
+    color: white;
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Nascondi stats */
+.filter-stats {
+    display: none;
+}
+
+/* Sottoassieme nascosto */
+.sottoassieme-card.filtered-hidden {
+    display: none;
+}
+
+/* Micro-animazione fade out */
+@keyframes fadeOut {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.95); }
+}
+
+.sottoassieme-card.filtering-out {
+    animation: fadeOut 0.2s ease-out forwards;
+}

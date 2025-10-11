@@ -1,0 +1,49 @@
+/* =========================================================
+   RESPONSIVE - Media Queries
+   ========================================================= */
+
+@media (max-width: 768px) {
+    .search-double {
+        grid-template-columns: 1fr;
+    }
+
+    .articolo-item {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-sm);
+    }
+
+    .commessa-info {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+
+    .header-content {
+        flex-wrap: wrap;
+    }
+
+    .header-left {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .filter-wrapper:hover,
+    .filter-wrapper:focus-within {
+        width: 240px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-content h1 {
+        font-size: var(--fs-16);
+    }
+
+    .setup-card {
+        padding: 24px;
+    }
+
+    .modal-content,
+    .csv-modal-content {
+        width: 95%;
+        padding: var(--spacing-lg);
+    }
+}

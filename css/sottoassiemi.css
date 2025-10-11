@@ -1,0 +1,251 @@
+/* =========================================================
+   SOTTOASSIEMI - Card, Header, Content
+   ========================================================= */
+
+.sottoassiemi-container {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.sottoassieme-card {
+    background: var(--bg-secondary);
+    border: 0px solid var(--border-color);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color var(--t) var(--ease), background var(--t) var(--ease);
+}
+
+.sottoassieme-card:hover {
+    border-color: var(--separator);
+}
+
+.sottoassieme-card.completed {
+    border-left: 0px solid var(--accent-green);
+    background: rgba(86, 224, 127, 0.459);
+}
+
+.sottoassieme-card.completed:hover {
+    background: rgba(86, 224, 127, 0.459);
+}
+
+.sottoassieme-card.completed .sottoassieme-header,
+.sottoassieme-card.completed .sottoassieme-header:hover {
+    background: transparent;
+}
+
+/* ---- HEADER ---- */
+
+.sottoassieme-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    min-height: 44px;
+    cursor: pointer;
+    user-select: none;
+    background: rgba(28, 28, 30, 0.144);
+    backdrop-filter: blur(8px);
+}
+
+.sottoassieme-header:hover {
+    background: var(--bg-elevated);
+}
+
+.sottoassieme-toggle {
+    width: 20px;
+    height: 20px;
+    display: grid;
+    place-items: center;
+    color: var(--text-tertiary);
+    font-size: 14px;
+    transition: transform var(--t) var(--ease), color var(--t) var(--ease);
+}
+
+.sottoassieme-toggle.expanded {
+    transform: rotate(90deg);
+    color: var(--text-secondary);
+}
+
+.sottoassieme-code {
+    font-family: "SF Mono", "Menlo", "Monaco", "Courier New", monospace;
+    font-weight: 700;
+    font-size: var(--fs-12);
+    color: #111;
+    min-width: 110px;
+}
+
+.sottoassieme-desc {
+    flex: 1;
+    color: var(--text-primary);
+    font-size: var(--fs-14);
+    font-weight: 600;
+}
+
+.btn-delete {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 6px;
+    background: none;
+    border: none;
+    color: #444;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.15s ease, transform 0.1s ease;
+}
+
+.icon-trash {
+    width: 14px;
+    height: 14px;
+    stroke: var(--accent-blue);
+    stroke-width: 1.8;
+    fill: none;
+    transition: stroke 0.15s ease, transform 0.15s ease;
+}
+
+.btn-delete:hover {
+    color: var(--accent-red);
+}
+
+.btn-delete:hover .icon-trash {
+    stroke: var(--accent-red);
+    transform: scale(1.05);
+}
+
+.btn-delete:active {
+    transform: scale(0.95);
+}
+
+/* ---- CONTENT ---- */
+
+.sottoassieme-content {
+    display: none;
+    padding: var(--spacing-lg);
+    background: var(--bg-tertiary);
+    border-top: 1px solid var(--border-color);
+}
+
+.sottoassieme-content.expanded {
+    display: block;
+}
+
+/* ---- MULTI SELECT ---- */
+
+.multi-select-bar {
+    position: sticky;
+    top: 60px;
+    z-index: 50;
+    background: var(--accent-blue);
+    color: white;
+    padding: 12px 24px;
+    border-radius: var(--radius-md);
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(10, 132, 255, 0.2);
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.multi-select-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+.selected-count {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.multi-select-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-deselect {
+    padding: 6px 14px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    color: white;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-deselect:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.btn-delete-multiple {
+    padding: 6px 14px;
+    background: white;
+    border: none;
+    border-radius: 6px;
+    color: var(--accent-blue);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-delete-multiple:hover {
+    background: #f0f0f0;
+    transform: translateY(-1px);
+}
+
+/* ---- CHECKBOX CUSTOM (DOT BLU) ---- */
+
+.sottoassieme-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    background: var(--bg-secondary);
+    margin: 0;
+}
+
+.sottoassieme-checkbox:hover {
+    border-color: var(--accent-blue);
+}
+
+.sottoassieme-checkbox:checked {
+    border-color: var(--accent-blue);
+    background: var(--accent-blue);
+}
+
+.sottoassieme-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
+}
+
+/* Card selezionata */
+.sottoassieme-card.selected {
+    border-color: var(--accent-blue);
+    background: rgba(10, 132, 255, 0.05);
+}

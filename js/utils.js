@@ -32,9 +32,15 @@ async function loadJSON(url) {
 function searchByCodice(articoli, query) {
     if (!query) return [];
     const q = query.toLowerCase();
-    return articoli.filter(art => 
-         art.codice && art.codice.toLowerCase().includes(q)  // <-- AGGIUNGI && art.codice
-    ).slice(0, 20); // Limita a 20 risultati
+    
+    const results = articoli.filter(art => 
+        art.codice && art.codice.toLowerCase().includes(q)
+    );
+    
+    // ✅ Ordina alfabeticamente per codice
+    results.sort((a, b) => a.codice.localeCompare(b.codice));
+    
+    return results.slice(0, 20);
 }
 
 // Ricerca articoli per descrizione (doppio filtro AND)
@@ -103,8 +109,10 @@ function searchByDescrizione(articoli, query1, query2) {
     }
 
 
-    // Modal conferma personalizzato
+
+// Modal conferma personalizzato
 let confirmCallback = null;
+let confirmModalKeyHandler = null;
 
 function showConfirm(title, message, onConfirm) {
     const modal = document.getElementById('confirmModal');
@@ -118,6 +126,9 @@ function showConfirm(title, message, onConfirm) {
     confirmCallback = onConfirm;
 
     modal.style.display = 'flex';
+    
+    // Focus sul bottone Elimina (default)
+    setTimeout(() => btnConfirm.focus(), 50);
 
     // Gestione click
     btnCancel.onclick = hideConfirm;
@@ -131,21 +142,36 @@ function showConfirm(title, message, onConfirm) {
         if (e.target === modal) hideConfirm();
     };
 
-    // ESC per chiudere
-    const escHandler = (e) => {
+    // Keyboard navigation
+    confirmModalKeyHandler = (e) => {
         if (e.key === 'Escape') {
             hideConfirm();
-            document.removeEventListener('keydown', escHandler);
+        } else if (e.key === 'Enter') {
+            e.preventDefault();
+            if (confirmCallback) confirmCallback();
+            hideConfirm();
+        } else if (e.key === 'ArrowLeft') {
+            e.preventDefault();
+            btnCancel.focus();
+        } else if (e.key === 'ArrowRight') {
+            e.preventDefault();
+            btnConfirm.focus();
         }
     };
-    document.addEventListener('keydown', escHandler);
+    
+    document.addEventListener('keydown', confirmModalKeyHandler);
 }
 
 function hideConfirm() {
     document.getElementById('confirmModal').style.display = 'none';
     confirmCallback = null;
+    
+    // Rimuovi listener
+    if (confirmModalKeyHandler) {
+        document.removeEventListener('keydown', confirmModalKeyHandler);
+        confirmModalKeyHandler = null;
+    }
 }
-
 
 // Alert personalizzato (solo messaggio)
 function showAlert(message) {

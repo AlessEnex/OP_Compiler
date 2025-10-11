@@ -58,6 +58,9 @@ class BomManager {
     // Rimuove un sottoassieme
     removeSottoassieme(progressivo) {
         this.sottoassiemi = this.sottoassiemi.filter(sa => sa.progressivo !== progressivo);
+        
+        // ✅ Ricalcola le dipendenze dopo aver eliminato il sottoassieme
+        this.recalculateAllDependencies();
     }
 
     // Trova un articolo nel database (o restituisce info minime se non trovato)
@@ -406,6 +409,11 @@ class BomManager {
     searchArticoliByDescrizione(query1, query2) {
         const articoliResults = searchByDescrizione(this.articoli, query1, query2);
         const phantomResults = searchByDescrizione(this.phantom, query1, query2).map(p => ({...p, isPhantom: true}));
-        return [...articoliResults, ...phantomResults];
+        
+        // ✅ Unisci e ordina alfabeticamente per descrizione
+        const allResults = [...articoliResults, ...phantomResults];
+        allResults.sort((a, b) => a.descrizione.localeCompare(b.descrizione));
+        
+        return allResults.slice(0, 20);
     }
 }
