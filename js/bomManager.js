@@ -11,6 +11,7 @@ class BomManager {
         this.phantom = []; // Database phantom
         this.sottoassiemiStandard = []; // Lista sottoassiemi standard
         this.dipendenze = []; // <-- AGGIUNGI QUESTA RIGA
+        this.assiemi = []; // Database assiemi riutilizzabili
     }
 
     // Inizializza la commessa
@@ -27,6 +28,7 @@ class BomManager {
         this.phantom = await loadJSON('data/phantom.json') || [];
         this.sottoassiemiStandard = await loadJSON('data/sottoassiemi.json') || [];
         this.dipendenze = await loadJSON('data/dipendenze.json') || [];
+        this.assiemi = await loadJSON('data/assiemi.json') || [];
         
         // 🔧 Sanifica i dati convertendo tutto in stringhe
         this.articoli = this.articoli.map(art => ({
@@ -50,6 +52,7 @@ class BomManager {
             descrizione: sa.descrizione,
             codice: generateOPCode(this.anno, this.commessa, sa.progressivo),
             articoli: [], // Array di articoli in questo sottoassieme
+            gruppiAssiemi: [], // Array di gruppi assieme
             expanded: false,
             completed: false  // <-- AGGIUNGI QUESTA RIGA
         }));
@@ -318,28 +321,35 @@ class BomManager {
     }
 
     // Rimuove un articolo da un sottoassieme
-    // Rimuove un articolo da un sottoassieme
-    removeArticolo(progressivoSottoassieme, codiceArticolo, phantomPadre = null) {
+    removeArticolo(progressivoSottoassieme, codiceArticolo, phantomPadre = null, gruppoAssieme = null) {
         const sottoassieme = this.sottoassiemi.find(sa => sa.progressivo === progressivoSottoassieme);
         if (!sottoassieme) return;
 
-        sottoassieme.articoli = sottoassieme.articoli.filter(a => 
-            !(a.codice === codiceArticolo && a.phantomPadre === phantomPadre)
-        );
+        sottoassieme.articoli = sottoassieme.articoli.filter(a => {
+            if (a.codice !== codiceArticolo) return true;
+            if (a.phantomPadre !== phantomPadre) return true;
+            if (gruppoAssieme && a.gruppoAssieme !== gruppoAssieme) return true;
+            if (!gruppoAssieme && a.gruppoAssieme) return true;
+            return false;
+        });
         
         // Ricalcola le dipendenze dopo la rimozione
         this.removeDependenciesArticles(codiceArticolo);
     }
 
     // Modifica quantità di un articolo
-    // Modifica quantità di un articolo
-    updateQuantita(progressivoSottoassieme, codiceArticolo, delta, phantomPadre = null) {
+    updateQuantita(progressivoSottoassieme, codiceArticolo, delta, phantomPadre = null, gruppoAssieme = null) {
         const sottoassieme = this.sottoassiemi.find(sa => sa.progressivo === progressivoSottoassieme);
         if (!sottoassieme) return;
 
-        const articolo = sottoassieme.articoli.find(a => 
-            a.codice === codiceArticolo && a.phantomPadre === phantomPadre
-        );
+        const articolo = sottoassieme.articoli.find(a => {
+            if (a.codice !== codiceArticolo) return false;
+            if (a.phantomPadre !== phantomPadre) return false;
+            if (gruppoAssieme && a.gruppoAssieme !== gruppoAssieme) return false;
+            if (!gruppoAssieme && a.gruppoAssieme) return false;
+            return true;
+        });
+        
         if (!articolo) return;
 
         articolo.quantita += delta;
@@ -350,13 +360,18 @@ class BomManager {
     }
 
     // Imposta quantità diretta
-    setQuantita(progressivoSottoassieme, codiceArticolo, quantita, phantomPadre = null) {
+    setQuantita(progressivoSottoassieme, codiceArticolo, quantita, phantomPadre = null, gruppoAssieme = null) {
         const sottoassieme = this.sottoassiemi.find(sa => sa.progressivo === progressivoSottoassieme);
         if (!sottoassieme) return;
 
-        const articolo = sottoassieme.articoli.find(a => 
-            a.codice === codiceArticolo && a.phantomPadre === phantomPadre
-        );
+        const articolo = sottoassieme.articoli.find(a => {
+            if (a.codice !== codiceArticolo) return false;
+            if (a.phantomPadre !== phantomPadre) return false;
+            if (gruppoAssieme && a.gruppoAssieme !== gruppoAssieme) return false;
+            if (!gruppoAssieme && a.gruppoAssieme) return false;
+            return true;
+        });
+        
         if (!articolo) return;
 
         articolo.quantita = Math.max(1, parseInt(quantita) || 1);
@@ -416,4 +431,120 @@ class BomManager {
         
         return allResults.slice(0, 20);
     }
+
+    // ========== GESTIONE ASSIEMI ==========
+
+    // Ottiene assiemi disponibili per un sottoassieme specifico
+    getAssiemiDisponibili(progressivoSottoassieme) {
+        return this.assiemi.filter(assieme => {
+            if (assieme.disponibile_in === 'tutti') return true;
+            return assieme.disponibile_in.includes(progressivoSottoassieme);
+        });
+    }
+
+    // Aggiunge un assieme a un sottoassieme
+    addAssieme(progressivoSottoassieme, assiemeId, quantitaAssieme = 1) {
+        const sottoassieme = this.sottoassiemi.find(sa => sa.progressivo === progressivoSottoassieme);
+        if (!sottoassieme) {
+            console.error('Sottoassieme non trovato:', progressivoSottoassieme);
+            return false;
+        }
+
+        const assieme = this.assiemi.find(a => a.id === assiemeId);
+        if (!assieme) {
+            console.error('Assieme non trovato:', assiemeId);
+            return false;
+        }
+
+        // Crea un ID univoco per questo gruppo
+        const gruppoId = `${assiemeId}_${Date.now()}`;
+
+        // Aggiungi gruppo alla lista del sottoassieme di origine
+        sottoassieme.gruppiAssiemi.push({
+            id: gruppoId,
+            assiemeId: assiemeId,
+            nomeAssieme: assieme.nome,
+            quantitaAssieme: quantitaAssieme
+        });
+
+        // Espandi gli articoli dell'assieme nei sottoassiemi corretti
+        assieme.articoli.forEach(item => {
+            const articolo = this.findArticolo(item.codice);
+            const quantitaTotale = item.quantita * quantitaAssieme;
+            
+            // Determina OP destinazione
+            let targetProgressivo = progressivoSottoassieme;
+            if (item.op_destinazione && item.op_destinazione !== 'SAME') {
+                targetProgressivo = item.op_destinazione;
+            }
+            
+            // Trova il sottoassieme target
+            const targetSottoassieme = this.sottoassiemi.find(sa => sa.progressivo === targetProgressivo);
+            if (!targetSottoassieme) {
+                console.warn(`Sottoassieme ${targetProgressivo} non trovato per articolo ${item.codice}`);
+                return;
+            }
+            
+            targetSottoassieme.articoli.push({
+                ...articolo,
+                quantita: quantitaTotale,
+                gruppoAssieme: gruppoId,
+                progressivoOrigine: progressivoSottoassieme, // Salva l'OP di origine del gruppo
+                phantomPadre: null,
+                variantePadre: null
+            });
+        });
+
+        console.log(`✅ Assieme "${assieme.nome}" aggiunto a ${sottoassieme.codice}`);
+        return true;
+    }
+
+    // Rimuove un gruppo assieme completo
+    removeGruppoAssieme(progressivoSottoassieme, gruppoId) {
+        // Rimuovi il gruppo dalla lista del sottoassieme di origine
+        const sottoassiemeOrigine = this.sottoassiemi.find(sa => sa.progressivo === progressivoSottoassieme);
+        if (sottoassiemeOrigine) {
+            sottoassiemeOrigine.gruppiAssiemi = sottoassiemeOrigine.gruppiAssiemi.filter(g => g.id !== gruppoId);
+        }
+
+        // Rimuovi tutti gli articoli di questo gruppo da TUTTI i sottoassiemi
+        this.sottoassiemi.forEach(sa => {
+            sa.articoli = sa.articoli.filter(a => a.gruppoAssieme !== gruppoId);
+        });
+
+        console.log(`🗑️ Gruppo assieme ${gruppoId} rimosso`);
+    }
+
+    // Modifica quantità di un intero gruppo assieme
+    updateQuantitaGruppoAssieme(progressivoSottoassieme, gruppoId, nuovaQuantita) {
+        const sottoassieme = this.sottoassiemi.find(sa => sa.progressivo === progressivoSottoassieme);
+        if (!sottoassieme) return;
+
+        const gruppo = sottoassieme.gruppiAssiemi.find(g => g.id === gruppoId);
+        if (!gruppo) return;
+
+        const assieme = this.assiemi.find(a => a.id === gruppo.assiemeId);
+        if (!assieme) return;
+
+        const vecchiaQuantita = gruppo.quantitaAssieme;
+        gruppo.quantitaAssieme = nuovaQuantita;
+
+        // Ricalcola quantità di tutti gli articoli del gruppo in TUTTI i sottoassiemi
+        assieme.articoli.forEach(item => {
+            this.sottoassiemi.forEach(sa => {
+                const articoloGruppo = sa.articoli.find(a => 
+                    a.codice === item.codice && a.gruppoAssieme === gruppoId
+                );
+                
+                if (articoloGruppo) {
+                    articoloGruppo.quantita = item.quantita * nuovaQuantita;
+                }
+            });
+        });
+
+        console.log(`📝 Quantità gruppo ${gruppoId}: ${vecchiaQuantita} → ${nuovaQuantita}`);
+    }
+
+    // Modifica export per gestire assiemi (gli articoli sono già espansi)
+    // Il metodo exportFlat() esistente funziona già correttamente!
 }

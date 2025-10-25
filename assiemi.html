@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestione Assiemi</title>
+    <!-- CSS base progetto -->
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components.css">
+    <!-- CSS specifico assiemi -->
+    <link rel="stylesheet" href="css/assiemi-page.css">
+</head>
+<body>
+    <div class="assiemi-container">
+        
+        <div class="assiemi-header">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <a href="index.html" class="btn-back">← Torna alla BoM</a>
+                <div style="display: flex; gap: 12px;">
+                    <button id="btnNewAssieme" class="btn-primary-dep">➕ Nuovo Assieme</button>
+                    <button id="btnExportJSONAssiemi" class="btn-export-dep">💾 Esporta JSON</button>
+                </div>
+            </div>
+            <h1>Gestione Assiemi</h1>
+            <div class="subtitle">Gruppi di articoli riutilizzabili nella distinta base</div>
+            <div class="dep-stats">
+                <div class="stat-item">
+                    <strong id="totalAssiemi">0</strong> assiemi totali
+                </div>
+                <div class="stat-item">
+                    <strong id="visibleAssiemi">0</strong> visibili
+                </div>
+            </div>
+            
+            <!-- Filtro ricerca -->
+            <div class="dep-filter">
+                <input type="text" id="filterInputAssiemi" class="filter-input" placeholder="Cerca per nome o codice articolo...">
+            </div>
+        </div>
+
+        <div class="assiemi-list" id="assiemiList">
+            <!-- Gli assiemi verranno caricati qui -->
+        </div>
+
+        <div class="empty-state" id="emptyStateAssiemi" style="display: none;">
+            <div style="font-size: 48px; margin-bottom: 16px;">📦</div>
+            <div style="font-size: 16px; font-weight: 600; margin-bottom: 8px;">Nessun assieme configurato</div>
+            <div style="font-size: 14px;">Clicca "Nuovo Assieme" per iniziare</div>
+        </div>
+    </div>
+
+    <!-- Modal per creare/modificare assieme -->
+    <div id="assiemeModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content-dep">
+            <div class="modal-header-dep">
+                <h2 id="modalTitleAssieme">Nuovo Assieme</h2>
+                <button id="btnCloseModalAssieme" class="btn-close-modal">✕</button>
+            </div>
+            
+            <form id="assiemeForm" class="dep-form">
+                <!-- ID (auto-generato) -->
+                <div class="form-group-dep">
+                    <label>ID</label>
+                    <input type="text" id="assiemeId" class="input-dep" readonly style="background: var(--bg-tertiary); cursor: not-allowed;">
+                </div>
+
+                <!-- Nome -->
+                <div class="form-group-dep">
+                    <label>Nome Assieme</label>
+                    <input type="text" id="assiemeNome" class="input-dep" placeholder="es. Kit Pressostato Standard" required>
+                </div>
+
+                <!-- Articoli (multi-select con ricerca + quantità) -->
+                <div class="form-group-dep">
+                    <label>Articoli contenuti</label>
+                    <div class="search-articolo-wrapper">
+                        <input type="text" id="searchArticoloAssieme" class="input-dep" placeholder="Cerca articolo per codice o descrizione...">
+                        <div id="articoloResultsAssieme" class="search-results-dep"></div>
+                    </div>
+                    <div id="selectedArticoliAssieme" class="selected-items">
+                        <!-- Articoli selezionati appariranno qui -->
+                    </div>
+                </div>
+
+                <!-- Disponibilità sottoassiemi -->
+<div class="form-group-dep">
+                    <label>Disponibile in sottoassiemi</label>
+                    
+                    <!-- Toggle "Tutti" -->
+                    <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 12px;">
+                        <input type="checkbox" id="assiemeTuttiOP" style="width: auto;">
+                        <span style="font-weight: 600;">Disponibile per TUTTI i sottoassiemi</span>
+                    </label>
+                    
+                    <!-- Campo ricerca sottoassiemi -->
+                    <div style="margin-bottom: 8px;">
+                        <input type="text" id="filterSottoassiemi" class="input-dep" placeholder="🔍 Cerca sottoassieme (es: compressore, 05...)" style="font-size: 13px;">
+                    </div>
+                    
+                    <!-- Lista checkbox sottoassiemi -->
+                    <div id="sottoassiemiCheckboxes" class="sottoassiemi-checkboxes">
+                        <!-- I checkbox verranno generati dinamicamente -->
+                    </div>
+                    <div id="noResultsSottoassiemi" style="display: none; padding: 12px; text-align: center; color: var(--text-tertiary); font-size: 12px;">
+                        Nessun sottoassieme trovato
+                    </div>
+                </div>
+
+                <!-- Bottoni -->
+                <div class="modal-actions-dep">
+                    <button type="button" id="btnCancelModalAssieme" class="btn-cancel-dep">Annulla</button>
+                    <button type="submit" class="btn-save-dep">💾 Salva</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/assiemi.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+[
+  {
+    "id": "ASS_EXAMPLE_001",
+    "nome": "Kit Pressostato Standard",
+    "articoli": [
+      {
+        "codice": "40C103F",
+        "quantita": 2,
+        "op_destinazione": "SAME"
+      },
+      {
+        "codice": "25C310",
+        "quantita": 1,
+        "op_destinazione": "05"
+      }
+    ],
+    "disponibile_in": "tutti"
+  }
+]

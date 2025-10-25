@@ -409,3 +409,30 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
+
+/* Modal selezione assiemi - Input ricerca */
+.search-input-assieme-modal {
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    font-size: 13px;
+    transition: all 0.18s ease;
+}
+
+.search-input-assieme-modal:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    background: var(--bg-secondary);
+    box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.1);
+}
+
+.search-input-assieme-modal::placeholder {
+    color: var(--text-tertiary);
+}
+
+.assieme-option-filterable {
+    transition: all 0.15s ease;
+}
