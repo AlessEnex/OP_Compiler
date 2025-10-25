@@ -246,7 +246,8 @@ textarea:focus {
 
 /* Articolo code */
 .articolo-code,
-.sottoassieme-code {
+.sottoassieme-code,
+.result-code {
   color: var(--text-primary) !important;
   font-family: 'IBM Plex Mono', 'SF Mono', monospace !important;
 }
@@ -368,8 +369,12 @@ button:not(.theme-toggle) {
   color: var(--text-secondary) !important;
 }
 
-.articolo-desc-extra {
+.articolo-desc-extra,
+.result-desc-extra {
   color: var(--text-tertiary) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
 }
 
 /* Gruppo assieme */
@@ -396,6 +401,19 @@ button:not(.theme-toggle) {
 /* Modals */
 .modal-overlay {
   background: rgba(0, 0, 0, 0.7) !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  z-index: 1000 !important;
+}
+
+.modal-overlay[style*="display: flex"],
+.modal-overlay[style*="display: block"] {
+  display: flex !important;
 }
 
 :root[data-theme="light"] .modal-overlay {
@@ -406,6 +424,10 @@ button:not(.theme-toggle) {
   background: var(--bg-secondary) !important;
   color: var(--text-primary) !important;
   border-color: var(--border-color) !important;
+  max-width: 90vw !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+  margin: auto !important;
 }
 
 .modal-title {

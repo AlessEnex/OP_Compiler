@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestione Assiemi</title>
+    
+    <!-- Theme system (deve essere caricato per primo) -->
+    <link rel="stylesheet" href="css/theme.css">
+    <script src="js/theme-toggle.js"></script>
+    
     <!-- CSS base progetto -->
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
@@ -16,9 +21,19 @@
         <div class="assiemi-header">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
                 <a href="index.html" class="btn-back">← Torna alla BoM</a>
-                <div style="display: flex; gap: 12px;">
-                    <button id="btnNewAssieme" class="btn-primary-dep">➕ Nuovo Assieme</button>
-                    <button id="btnExportJSONAssiemi" class="btn-export-dep">💾 Esporta JSON</button>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <!-- Theme Toggle -->
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 12px; color: var(--text-tertiary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Tema</span>
+                        <button class="theme-toggle" aria-label="Toggle theme">
+                            <span class="theme-toggle-icon moon"></span>
+                            <div class="theme-toggle-slider"></div>
+                            <span class="theme-toggle-icon sun"></span>
+                        </button>
+                    </div>
+                    
+                    <button id="btnNewAssieme" class="btn-primary-dep"> Nuovo Assieme</button>
+                    <button id="btnExportJSONAssiemi" class="btn-export-dep">Esporta JSON</button>
                 </div>
             </div>
             <h1>Gestione Assiemi</h1>

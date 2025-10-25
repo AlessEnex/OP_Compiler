@@ -155,6 +155,9 @@ renderSottoassiemi() {
                         <input type="text" class="search-input" placeholder="Parola chiave 1..." data-search="desc1">
                         <input type="text" class="search-input" placeholder="Parola chiave 2..." data-search="desc2">
                     </div>
+                    <button class="btn-add-assieme" data-progressivo="${sottoassieme.progressivo}" style="padding: 8px 14px; background: transparent; border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-secondary); font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap; transition: all 0.15s ease;">
+                        + Assieme
+                    </button>
                     <div style="display: flex; align-items: center; gap: 6px; padding: 8px 10px; background: var(--bg-tertiary); border: none; border-radius: 6px; white-space: nowrap;">
                         <span style="font-size: 11px; color: var(--text-tertiary);" data-mode="codice">Codice</span>
                         <div class="toggle-switch-mini active">
@@ -236,6 +239,26 @@ renderSottoassiemi() {
         
         searchDesc1.addEventListener('input', searchDescrizione);
         searchDesc2.addEventListener('input', searchDescrizione);
+        
+        // Bottone Aggiungi Assieme
+        const btnAddAssieme = searchSection.querySelector('.btn-add-assieme');
+        if (btnAddAssieme) {
+            btnAddAssieme.addEventListener('click', () => {
+                this.openAssiemeModal(sottoassieme);
+            });
+            
+            // Hover effect
+            btnAddAssieme.addEventListener('mouseenter', () => {
+                btnAddAssieme.style.background = 'var(--bg-tertiary)';
+                btnAddAssieme.style.borderColor = 'var(--separator)';
+                btnAddAssieme.style.color = 'var(--text-primary)';
+            });
+            btnAddAssieme.addEventListener('mouseleave', () => {
+                btnAddAssieme.style.background = 'transparent';
+                btnAddAssieme.style.borderColor = 'var(--border-color)';
+                btnAddAssieme.style.color = 'var(--text-secondary)';
+            });
+        }
     },
 
     // Renderizza risultati ricerca
@@ -335,27 +358,130 @@ renderSottoassiemi() {
         };
     },
 
-    // Renderizza lista articoli
+    // Renderizza lista articoli con supporto gruppi assiemi
     renderArticoliList(sottoassieme, container) {
-        if (sottoassieme.articoli.length === 0) {
+        if (sottoassieme.articoli.length === 0 && sottoassieme.gruppiAssiemi.length === 0) {
             container.innerHTML = '<div class="empty-articoli">Nessun articolo inserito</div>';
             return;
         }
 
         container.innerHTML = '';
+        
+        // Raggruppa articoli per gruppoAssieme
+        const articoliPerGruppo = {};
+        const articoliSingoli = [];
+        
         sottoassieme.articoli.forEach(articolo => {
+            if (articolo.gruppoAssieme) {
+                if (!articoliPerGruppo[articolo.gruppoAssieme]) {
+                    articoliPerGruppo[articolo.gruppoAssieme] = [];
+                }
+                articoliPerGruppo[articolo.gruppoAssieme].push(articolo);
+            } else {
+                articoliSingoli.push(articolo);
+            }
+        });
+        
+        // Renderizza gruppi assiemi
+        sottoassieme.gruppiAssiemi.forEach(gruppo => {
+            const articoliGruppo = articoliPerGruppo[gruppo.id] || [];
+            this.renderGruppoAssieme(sottoassieme, gruppo, articoliGruppo, container);
+        });
+        
+        // Renderizza articoli singoli
+        articoliSingoli.forEach(articolo => {
+            this.renderArticoloSingolo(sottoassieme, articolo, container);
+        });
+    },
+    
+    // Renderizza un gruppo assieme
+    renderGruppoAssieme(sottoassieme, gruppo, articoli, container) {
+        const gruppoDiv = document.createElement('div');
+        gruppoDiv.className = 'gruppo-assieme';
+        gruppoDiv.style.cssText = `
+            background: rgba(10, 132, 255, 0.03);
+            border-left: 3px solid var(--accent-blue);
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+        `;
+        
+        // Header del gruppo
+        const headerDiv = document.createElement('div');
+        headerDiv.style.cssText = `
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border-color);
+        `;
+        
+        headerDiv.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 14px; font-weight: 700;">${gruppo.nomeAssieme}</span>
+                <div style="display: flex; align-items: center; gap: 4px;">
+                    <button class="qty-btn-gruppo" data-action="minus" style="width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; background: none; border: none; color: #222; font-size: 14px; cursor: pointer;">−</button>
+                    <input type="number" class="qty-input-gruppo" value="${gruppo.quantitaAssieme}" min="1" style="width: 40px; text-align: center; padding: 2px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 4px; font-size: 12px;">
+                    <button class="qty-btn-gruppo" data-action="plus" style="width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; background: none; border: none; color: #222; font-size: 14px; cursor: pointer;">+</button>
+                    <span style="font-size: 12px; color: var(--text-tertiary); margin-left: 4px;">x assieme</span>
+                </div>
+            </div>
+            <button class="btn-remove-gruppo" style="width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; background: none; border: none; color: #c62828; font-size: 16px; cursor: pointer;">×</button>
+        `;
+        
+        gruppoDiv.appendChild(headerDiv);
+        
+        // Eventi per header
+        const qtyInput = headerDiv.querySelector('.qty-input-gruppo');
+        const btnMinus = headerDiv.querySelector('[data-action="minus"]');
+        const btnPlus = headerDiv.querySelector('[data-action="plus"]');
+        const btnRemove = headerDiv.querySelector('.btn-remove-gruppo');
+        
+        btnMinus.onclick = () => {
+            const newQty = Math.max(1, gruppo.quantitaAssieme - 1);
+            bomManager.updateQuantitaGruppoAssieme(sottoassieme.progressivo, gruppo.id, newQty);
+            this.refreshAllExpanded();
+        };
+        
+        btnPlus.onclick = () => {
+            bomManager.updateQuantitaGruppoAssieme(sottoassieme.progressivo, gruppo.id, gruppo.quantitaAssieme + 1);
+            this.refreshAllExpanded();
+        };
+        
+        qtyInput.addEventListener('change', (e) => {
+            const newQty = Math.max(1, parseInt(e.target.value) || 1);
+            bomManager.updateQuantitaGruppoAssieme(sottoassieme.progressivo, gruppo.id, newQty);
+            this.refreshAllExpanded();
+        });
+        
+        btnRemove.onclick = () => {
+            showConfirm(
+                'Rimuovi assieme',
+                `Rimuovere "${gruppo.nomeAssieme}" da questo sottoassieme?`,
+                () => {
+                    bomManager.removeGruppoAssieme(sottoassieme.progressivo, gruppo.id);
+                    this.refreshAllExpanded();
+                }
+            );
+        };
+        
+        // Articoli del gruppo
+        articoli.forEach(articolo => {
             const item = document.createElement('div');
             item.className = 'articolo-item';
+            item.style.cssText = `
+                grid-template-columns: 20px 110px 1fr 130px 40px;
+                padding-left: 0;
+            `;
             
             if (articolo.trovato === false) {
                 item.classList.add('not-found');
             }
             
             item.innerHTML = `
-                <div class="articolo-code">
-                    ${articolo.codice}
-                    ${articolo.phantomPadre ? `<div class="phantom-info">da ${articolo.phantomPadre} [${articolo.variantePadre}]</div>` : ''}
-                </div>
+                <div style="color: var(--accent-blue); font-size: 16px;">└</div>
+                <div class="articolo-code">${articolo.codice}</div>
                 <div class="articolo-desc">
                     ${articolo.descrizione}
                     ${articolo.descrizione_aggiuntiva ? `<div class="articolo-desc-extra">${articolo.descrizione_aggiuntiva}</div>` : ''}
@@ -367,44 +493,103 @@ renderSottoassiemi() {
                 </div>
                 <button class="btn-remove">×</button>
             `;
-
+            
             const qtyInput = item.querySelector('.qty-input');
             const btnMinus = item.querySelector('[data-action="minus"]');
             const btnPlus = item.querySelector('[data-action="plus"]');
             const btnRemove = item.querySelector('.btn-remove');
 
             btnMinus.onclick = () => {
-                bomManager.updateQuantita(sottoassieme.progressivo, articolo.codice, -1, articolo.phantomPadre);
+                bomManager.updateQuantita(sottoassieme.progressivo, articolo.codice, -1, articolo.phantomPadre, articolo.gruppoAssieme);
                 qtyInput.value = articolo.quantita;
                 this.refreshAllExpanded();
             };
 
             btnPlus.onclick = () => {
-                bomManager.updateQuantita(sottoassieme.progressivo, articolo.codice, 1, articolo.phantomPadre);
+                bomManager.updateQuantita(sottoassieme.progressivo, articolo.codice, 1, articolo.phantomPadre, articolo.gruppoAssieme);
                 qtyInput.value = articolo.quantita;
                 this.refreshAllExpanded();
             };
 
             qtyInput.addEventListener('change', (e) => {
-                bomManager.setQuantita(sottoassieme.progressivo, articolo.codice, e.target.value, articolo.phantomPadre);
+                bomManager.setQuantita(sottoassieme.progressivo, articolo.codice, e.target.value, articolo.phantomPadre, articolo.gruppoAssieme);
                 qtyInput.value = articolo.quantita;
                 this.refreshAllExpanded();
             });
 
             btnRemove.onclick = () => {
-                showConfirm(
-                    'Rimuovi articolo',
-                    `Rimuovere "${articolo.codice}" da questo sottoassieme?`,
-                    () => {
-                        bomManager.removeArticolo(sottoassieme.progressivo, articolo.codice, articolo.phantomPadre);
-                        this.renderArticoliList(sottoassieme, container);
-                        this.refreshAllExpanded();
-                    }
-                );
+                bomManager.removeArticolo(sottoassieme.progressivo, articolo.codice, articolo.phantomPadre, articolo.gruppoAssieme);
+                this.refreshAllExpanded();
             };
-
-            container.appendChild(item);
+            
+            gruppoDiv.appendChild(item);
         });
+        
+        container.appendChild(gruppoDiv);
+    },
+    
+    // Renderizza un singolo articolo (non in gruppo)
+    renderArticoloSingolo(sottoassieme, articolo, container) {
+        const item = document.createElement('div');
+        item.className = 'articolo-item';
+        
+        if (articolo.trovato === false) {
+            item.classList.add('not-found');
+        }
+        
+        item.innerHTML = `
+            <div class="articolo-code">
+                ${articolo.codice}
+                ${articolo.phantomPadre ? `<div class="phantom-info">da ${articolo.phantomPadre} [${articolo.variantePadre}]</div>` : ''}
+            </div>
+            <div class="articolo-desc">
+                ${articolo.descrizione}
+                ${articolo.descrizione_aggiuntiva ? `<div class="articolo-desc-extra">${articolo.descrizione_aggiuntiva}</div>` : ''}
+            </div>
+            <div class="articolo-qty">
+                <button class="qty-btn" data-action="minus">−</button>
+                <input type="number" class="qty-input" value="${articolo.quantita}" min="1">
+                <button class="qty-btn" data-action="plus">+</button>
+            </div>
+            <button class="btn-remove">×</button>
+        `;
+
+        const qtyInput = item.querySelector('.qty-input');
+        const btnMinus = item.querySelector('[data-action="minus"]');
+        const btnPlus = item.querySelector('[data-action="plus"]');
+        const btnRemove = item.querySelector('.btn-remove');
+
+        btnMinus.onclick = () => {
+            bomManager.updateQuantita(sottoassieme.progressivo, articolo.codice, -1, articolo.phantomPadre);
+            qtyInput.value = articolo.quantita;
+            this.refreshAllExpanded();
+        };
+
+        btnPlus.onclick = () => {
+            bomManager.updateQuantita(sottoassieme.progressivo, articolo.codice, 1, articolo.phantomPadre);
+            qtyInput.value = articolo.quantita;
+            this.refreshAllExpanded();
+        };
+
+        qtyInput.addEventListener('change', (e) => {
+            bomManager.setQuantita(sottoassieme.progressivo, articolo.codice, e.target.value, articolo.phantomPadre);
+            qtyInput.value = articolo.quantita;
+            this.refreshAllExpanded();
+        });
+
+        btnRemove.onclick = () => {
+            showConfirm(
+                'Rimuovi articolo',
+                `Rimuovere "${articolo.codice}" da questo sottoassieme?`,
+                () => {
+                    bomManager.removeArticolo(sottoassieme.progressivo, articolo.codice, articolo.phantomPadre);
+                    this.renderArticoliList(sottoassieme, container);
+                    this.refreshAllExpanded();
+                }
+            );
+        };
+
+        container.appendChild(item);
     },
 
     // Refresh sottoassiemi espansi
@@ -421,5 +606,205 @@ renderSottoassiemi() {
                 }
             }
         });
+    },
+    
+    // Apre modal per selezionare assieme
+    openAssiemeModal(sottoassieme) {
+        const assiemiDisponibili = bomManager.getAssiemiDisponibili(sottoassieme.progressivo);
+        
+        if (assiemiDisponibili.length === 0) {
+            alert('Nessun assieme disponibile per questo sottoassieme.\n\nVai su Assiemi per crearne di nuovi!');
+            return;
+        }
+        
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        
+        modal.innerHTML = `
+            <div class="modal-content" style="max-width: 800px;">
+                <div class="modal-header">
+                    <div class="modal-title">Seleziona Assieme</div>
+                    <div class="modal-subtitle">Scegli un assieme da aggiungere a ${sottoassieme.codice}</div>
+                </div>
+                
+                <div style="padding: 0 24px 24px 24px;">
+                    <!-- Prima riga: Ricerca per nome assieme -->
+                    <div style="margin-bottom: 12px;">
+                        <label style="display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-tertiary); margin-bottom: 6px;">Ricerca per nome assieme</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <input type="text" id="searchNome1" class="search-input-assieme-modal" placeholder="Parola chiave 1...">
+                            <input type="text" id="searchNome2" class="search-input-assieme-modal" placeholder="Parola chiave 2...">
+                        </div>
+                    </div>
+                    
+                    <!-- Seconda riga: Ricerca per articoli contenuti -->
+                    <div style="margin-bottom: 16px;">
+                        <label style="display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-tertiary); margin-bottom: 6px;">Ricerca per articoli contenuti</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                            <input type="text" id="searchDesc1" class="search-input-assieme-modal" placeholder="Descrizione 1...">
+                            <input type="text" id="searchDesc2" class="search-input-assieme-modal" placeholder="Descrizione 2...">
+                            <input type="text" id="searchCodice" class="search-input-assieme-modal" placeholder="Codice...">
+                        </div>
+                    </div>
+                    
+                    <!-- Lista assiemi -->
+                    <div id="assiemiListContainer" style="max-height: 350px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; padding: 8px; background: var(--bg-tertiary);">
+                        <!-- Gli assiemi verranno renderizzati qui -->
+                    </div>
+                    
+                    <div id="noResultsAssiemi" style="display: none; padding: 32px; text-align: center; color: var(--text-tertiary); font-size: 13px;">
+                        Nessun assieme trovato con i criteri di ricerca
+                    </div>
+                </div>
+                
+                <div class="modal-actions" style="padding: 16px 24px; border-top: 1px solid var(--border-color);">
+                    <button class="btn-cancel">Annulla</button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        const listContainer = modal.querySelector('#assiemiListContainer');
+        const noResults = modal.querySelector('#noResultsAssiemi');
+        
+        // Funzione per renderizzare assiemi filtrati
+        const renderAssiemi = (assiemiFiltrati) => {
+            if (assiemiFiltrati.length === 0) {
+                listContainer.style.display = 'none';
+                noResults.style.display = 'block';
+                return;
+            }
+            
+            listContainer.style.display = 'block';
+            noResults.style.display = 'none';
+            listContainer.innerHTML = '';
+            
+            assiemiFiltrati.forEach(assieme => {
+                const articoliPreview = assieme.articoli
+                    .map(a => {
+                        const art = bomManager.articoli.find(art => art.codice === a.codice);
+                        const desc = art ? art.descrizione : '???';
+                        return `${a.codice} (${a.quantita}x) - ${desc}`;
+                    })
+                    .join(', ');
+                
+                const option = document.createElement('div');
+                option.className = 'assieme-option-filterable';
+                option.dataset.id = assieme.id;
+                option.dataset.qty = '1';
+                option.style.cssText = 'padding: 12px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; transition: all 0.15s ease; margin-bottom: 6px;';
+                option.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <div style="font-weight: 700; font-size: 14px;">${assieme.nome}</div>
+                        <div class="qty-controls" style="display: flex; align-items: center; gap: 6px;">
+                            <button class="qty-btn-minus" style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 14px; cursor: pointer; font-weight: 600;">−</button>
+                            <span class="qty-display" style="min-width: 30px; text-align: center; font-weight: 600; font-size: 14px;">1</span>
+                            <button class="qty-btn-plus" style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 4px; color: var(--text-primary); font-size: 14px; cursor: pointer; font-weight: 600;">+</button>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: var(--text-secondary); line-height: 1.4;">${articoliPreview}</div>
+                `;
+                
+                const qtyDisplay = option.querySelector('.qty-display');
+                const btnMinus = option.querySelector('.qty-btn-minus');
+                const btnPlus = option.querySelector('.qty-btn-plus');
+                
+                // Eventi quantità
+                btnMinus.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    let qty = parseInt(option.dataset.qty);
+                    if (qty > 1) {
+                        qty--;
+                        option.dataset.qty = qty;
+                        qtyDisplay.textContent = qty;
+                    }
+                });
+                
+                btnPlus.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    let qty = parseInt(option.dataset.qty);
+                    qty++;
+                    option.dataset.qty = qty;
+                    qtyDisplay.textContent = qty;
+                });
+                
+                option.addEventListener('mouseenter', () => {
+                    option.style.background = 'var(--bg-elevated)';
+                    option.style.borderColor = 'var(--separator)';
+                });
+                option.addEventListener('mouseleave', () => {
+                    option.style.background = 'var(--bg-secondary)';
+                    option.style.borderColor = 'var(--border-color)';
+                });
+                
+                option.onclick = (e) => {
+                    // Se clicco sui bottoni quantità, non fare nulla
+                    if (e.target.closest('.qty-controls')) return;
+                    
+                    const qty = parseInt(option.dataset.qty);
+                    bomManager.addAssieme(sottoassieme.progressivo, assieme.id, qty);
+                    this.refreshAllExpanded();
+                    modal.remove();
+                };
+                
+                listContainer.appendChild(option);
+            });
+        };
+        
+        // Funzione di filtro
+        const filterAssiemi = () => {
+            const nome1 = modal.querySelector('#searchNome1').value.toLowerCase().trim();
+            const nome2 = modal.querySelector('#searchNome2').value.toLowerCase().trim();
+            const desc1 = modal.querySelector('#searchDesc1').value.toLowerCase().trim();
+            const desc2 = modal.querySelector('#searchDesc2').value.toLowerCase().trim();
+            const codice = modal.querySelector('#searchCodice').value.toLowerCase().trim();
+            
+            const filtrati = assiemiDisponibili.filter(assieme => {
+                const nomeAssieme = assieme.nome.toLowerCase();
+                
+                // Filtro per nome assieme
+                if (nome1 && !nomeAssieme.includes(nome1)) return false;
+                if (nome2 && !nomeAssieme.includes(nome2)) return false;
+                
+                // Filtro per articoli contenuti
+                if (desc1 || desc2 || codice) {
+                    const articoliMatch = assieme.articoli.some(item => {
+                        const art = bomManager.articoli.find(a => a.codice === item.codice);
+                        const artCodice = item.codice.toLowerCase();
+                        const artDesc = art ? art.descrizione.toLowerCase() : '';
+                        
+                        let match = true;
+                        
+                        if (codice && !artCodice.includes(codice)) match = false;
+                        if (desc1 && !artDesc.includes(desc1)) match = false;
+                        if (desc2 && !artDesc.includes(desc2)) match = false;
+                        
+                        return match;
+                    });
+                    
+                    if (!articoliMatch) return false;
+                }
+                
+                return true;
+            });
+            
+            renderAssiemi(filtrati);
+        };
+        
+        // Render iniziale
+        renderAssiemi(assiemiDisponibili);
+        
+        // Event listeners per i filtri
+        ['searchNome1', 'searchNome2', 'searchDesc1', 'searchDesc2', 'searchCodice'].forEach(id => {
+            const input = modal.querySelector(`#${id}`);
+            input.addEventListener('input', filterAssiemi);
+        });
+        
+        // Eventi chiusura
+        modal.querySelector('.btn-cancel').onclick = () => modal.remove();
+        modal.onclick = (e) => {
+            if (e.target === modal) modal.remove();
+        };
     }
 };

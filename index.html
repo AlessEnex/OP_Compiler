@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BoM Builder</title>
     
+    <!-- Theme system (deve essere caricato per primo) -->
+    <link rel="stylesheet" href="css/theme.css">
+    <script src="js/theme-toggle.js"></script>
+    
     <!-- CSS modulare - ORDINE IMPORTANTE -->
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/components.css">
@@ -83,6 +87,16 @@
                 
                 <!-- Destra: Bottoni (SENZA dipendenze) -->
                 <div class="header-right">
+                    <!-- Theme Toggle -->
+                    <div style="display: flex; align-items: center; gap: 8px; margin-right: 16px;">
+                        <span style="font-size: 12px; color: var(--text-tertiary); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em;">Tema</span>
+                        <button class="theme-toggle" aria-label="Toggle theme">
+                            <span class="theme-toggle-icon moon"></span>
+                            <div class="theme-toggle-slider"></div>
+                            <span class="theme-toggle-icon sun"></span>
+                        </button>
+                    </div>
+                    
                     <button id="btnImportCSV" class="btn-import-csv">Importa CSV</button>
                     <button id="btnExport" class="btn-export">Esporta Excel</button>
                 </div>

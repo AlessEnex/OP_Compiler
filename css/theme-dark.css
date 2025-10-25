@@ -1,0 +1,64 @@
+/* =========================================================
+   THEME DARK – Graphite Lavender
+   ========================================================= */
+
+:root {
+  /* Graphite layers */
+  --bg-primary: #0e0f11;
+  --bg-secondary: #16171a;
+  --bg-tertiary: #1d1e21;
+  --bg-elevated: #222327;
+
+  /* Typography */
+  --text-primary: #e3e5e9;
+  --text-secondary: #a2a4aa;
+  --text-tertiary: #6e7279;
+
+  /* Borders */
+  --border-color: #2b2c30;
+  --separator: #34363a;
+
+  /* Accents */
+  --accent-lavender: #b89cff; /* per focus, sottogruppi, selezioni */
+  --accent-green: #34c759;
+  --accent-red: #ff3b30;
+}
+
+/* Font pairing */
+body {
+  font-family: "Inter", "SF Pro Text", system-ui, sans-serif;
+  color: var(--text-primary);
+  background: var(--bg-primary);
+}
+
+/* Monospace per codici */
+code,
+.mono,
+.assieme-id,
+.dep-code {
+  font-family: "IBM Plex Mono", "SF Mono", monospace;
+}
+
+/* Feedback delicato */
+button,
+.btn,
+.card,
+.input {
+  transition:
+    background 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.2s ease;
+}
+
+button:hover,
+.btn:hover,
+.card:hover {
+  background: var(--bg-tertiary);
+  transform: translateY(-1px);
+}
+
+input:focus,
+select:focus {
+  border-color: var(--accent-lavender);
+  box-shadow: 0 0 0 3px rgba(184, 156, 255, 0.1);
+}
