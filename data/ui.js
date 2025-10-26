@@ -27,6 +27,24 @@ renderSottoassiemi() {
     updateMultiSelectBar();
 },
 
+    // Refresh solo dei sottoassiemi che sono expanded
+    refreshAllExpanded() {
+        // Trova tutti i sottoassiemi che sono expanded
+        bomManager.sottoassiemi.forEach(sottoassieme => {
+            if (sottoassieme.expanded) {
+                // Trova la card corrispondente nel DOM
+                const card = document.querySelector(`.sottoassieme-card[data-progressivo="${sottoassieme.progressivo}"]`);
+                if (card) {
+                    const content = card.querySelector('.sottoassieme-content');
+                    if (content && content.classList.contains('expanded')) {
+                        // Re-renderizza il contenuto
+                        this.renderSottoassiemeContent(sottoassieme, content);
+                    }
+                }
+            }
+        });
+    },
+
     // Crea card sottoassieme
     createSottoassiemeCard(sottoassieme) {
         const card = document.createElement('div');
@@ -97,19 +115,24 @@ renderSottoassiemi() {
             );
         };
 
-        header.appendChild(checkbox);
-        header.appendChild(toggle);
-        header.appendChild(code);
-        header.appendChild(desc);
-        header.appendChild(btnCheck);
-        header.appendChild(btnDelete);
+    // Order: toggle, confirm check (left near name), code, desc, ... delete and multi-select checkbox on right
+    header.appendChild(toggle);
+    header.appendChild(btnCheck);
+    header.appendChild(code);
+    header.appendChild(desc);
+
+    // delete button will stay on the right
+    header.appendChild(btnDelete);
+
+    // Checkbox per selezione multipla (moved to the right, next to delete)
+    header.appendChild(checkbox);
 
         const content = document.createElement('div');
         content.className = 'sottoassieme-content';
 
         // Toggle expand/collapse
         header.onclick = (e) => {
-            if (e.target === btnDelete || e.target === checkbox) return;
+        if (e.target === btnDelete || e.target === checkbox || e.target === btnCheck) return;
             sottoassieme.expanded = !sottoassieme.expanded;
             toggle.classList.toggle('expanded', sottoassieme.expanded);
             content.classList.toggle('expanded', sottoassieme.expanded);
@@ -137,7 +160,7 @@ renderSottoassiemi() {
             <div class="search-panel" data-panel="codice">
                 <div style="display: flex; gap: 8px; align-items: center;">
                     <input type="text" class="search-input" style="flex: 1;" placeholder="Cerca codice..." data-search="codice">
-                    <div style="display: flex; align-items: center; gap: 6px; padding: 8px 10px; background: var(--bg-tertiary); border: none; border-radius: 6px; white-space: nowrap;">
+                    <div style="display: flex; align-items: center; gap: 6px; padding: 8px 10px; border: none; border-radius: 6px; white-space: nowrap;">
                         <span style="font-size: 11px; color: var(--text-tertiary);" data-mode="codice">Codice</span>
                         <div class="toggle-switch-mini">
                             <div class="toggle-slider-mini"></div>
@@ -158,7 +181,7 @@ renderSottoassiemi() {
                     <button class="btn-add-assieme" data-progressivo="${sottoassieme.progressivo}" style="padding: 8px 14px; background: transparent; border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-secondary); font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap; transition: all 0.15s ease;">
                         + Assieme
                     </button>
-                    <div style="display: flex; align-items: center; gap: 6px; padding: 8px 10px; background: var(--bg-tertiary); border: none; border-radius: 6px; white-space: nowrap;">
+                    <div style="display: flex; align-items: center; gap: 6px; padding: 8px 10px; border: none; border-radius: 6px; white-space: nowrap;">
                         <span style="font-size: 11px; color: var(--text-tertiary);" data-mode="codice">Codice</span>
                         <div class="toggle-switch-mini active">
                             <div class="toggle-slider-mini"></div>

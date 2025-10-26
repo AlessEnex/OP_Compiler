@@ -1,15 +1,17 @@
 /* =========================================================
-   ARTICOLI - Lista, Search, Risultati
+   ARTICOLI - List, Search, Results
    ========================================================= */
 
-/* ---- SEARCH SECTION ---- */
+/* =========================================================
+   SEARCH SECTION
+   ========================================================= */
 
 .search-section,
 .search-content {
-    background: transparent !important;
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
+    background: transparent;
+    border: none;
+    outline: none;
+    box-shadow: none;
 }
 
 .search-panel {
@@ -33,14 +35,15 @@
     border-bottom: 1.5px solid var(--border-color);
     border-radius: 0;
     background: transparent;
-    transition: border-color 0.2s ease;
+    color: var(--text-primary);
+    transition: border-color var(--transition-base);
     padding: 6px 4px;
 }
 
 .search-double input:focus,
 .search-double select:focus {
     outline: none;
-    border-bottom: 1.5px solid var(--accent-blue);
+    border-bottom: 1.5px solid var(--accent-primary);
     background: transparent;
 }
 
@@ -48,19 +51,44 @@
     width: 100%;
     padding: 8px 12px;
     background: var(--bg-tertiary);
-    border: 0px solid var(--border-color);
+    border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
     color: var(--text-primary);
     font-size: var(--fs-14);
-    transition: border-color var(--t) var(--ease), background var(--t) var(--ease);
+    transition: all var(--transition-base);
+}
+
+.search-input::placeholder {
+    color: var(--text-tertiary);
 }
 
 .search-input:focus {
     background: var(--bg-elevated);
-    border-color: #d6d9df;
+    outline: none;
+    box-shadow: none;
+    /* rimuoviamo bordi laterali/superiori e manteniamo solo la linea inferiore */
+    border: 0;
+    border-bottom: 2px solid var(--accent-primary);
+    /* Mantieni gli angoli superiori arrotondati, ma rendi la linea inferiore piatta */
+    border-radius: var(--radius-sm);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    transition: border-bottom var(--transition-base), background var(--transition-base);
 }
 
-/* ---- SEARCH RESULTS ---- */
+:root[data-theme="light"] .search-input:focus {
+    /* stessa gestione anche per il tema chiaro */
+    box-shadow: none;
+    outline: none;
+    border: 0;
+    border-bottom: 2px solid var(--accent-primary);
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+/* =========================================================
+   SEARCH RESULTS
+   ========================================================= */
 
 .search-results {
     max-height: 280px;
@@ -78,7 +106,7 @@
     border-radius: var(--radius-sm);
     font-size: var(--fs-13);
     cursor: pointer;
-    transition: background var(--t) var(--ease), border-color var(--t) var(--ease), transform var(--t) var(--ease);
+    transition: all var(--transition-base);
 }
 
 .search-result-item:hover {
@@ -88,14 +116,14 @@
 }
 
 .search-result-item.phantom {
-    border-left: 1px solid #bbb;
+    border-left: 3px solid var(--accent-lavender);
 }
 
 .result-code {
-    font-family: "SF Mono", monospace;
+    font-family: 'IBM Plex Mono', 'SF Mono', monospace;
     font-weight: 700;
-    font-size: 12px;
-    color: #111;
+    font-size: var(--fs-12);
+    color: var(--text-primary);
     display: flex;
     align-items: center;
     gap: 6px;
@@ -106,15 +134,18 @@
 }
 
 .result-desc-extra {
-    font-size: 10px;
+    font-size: var(--fs-11);
     color: var(--text-tertiary);
     font-style: italic;
     margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .result-cat {
     color: var(--text-tertiary);
-    font-size: 11px;
+    font-size: var(--fs-11);
     text-align: right;
 }
 
@@ -125,11 +156,13 @@
     font-size: var(--fs-13);
 }
 
-/* ---- ARTICOLI LIST ---- */
+/* =========================================================
+   ARTICOLI LIST
+   ========================================================= */
 
 .articoli-section {
     background: transparent;
-    border: 0px solid var(--border-color);
+    border: none;
     border-radius: var(--radius-md);
     padding: var(--spacing-lg);
 }
@@ -152,24 +185,29 @@
     grid-template-columns: 110px 1fr 130px 23px;
     gap: var(--spacing-md);
     align-items: center;
-    padding: 6px 8px;
+    padding: 8px 10px;
     background: transparent;
     border: none;
     border-bottom: 1px solid var(--border-color);
     border-radius: 0;
     font-size: var(--fs-13);
+    transition: background var(--transition-base);
+}
+
+.articolo-item:hover {
+    background: var(--bg-tertiary);
 }
 
 .articolo-item.not-found {
-    background: #f7f1f1;
-    border-color: #eadcdc;
+    background: rgba(255, 59, 48, 0.1);
+    border-color: var(--accent-red);
 }
 
 .articolo-code {
-    font-family: "SF Mono", monospace;
+    font-family: 'IBM Plex Mono', 'SF Mono', monospace;
     font-weight: 700;
-    font-size: 12px;
-    color: #111;
+    font-size: var(--fs-12);
+    color: var(--text-primary);
 }
 
 .articolo-desc {
@@ -177,24 +215,29 @@
 }
 
 .articolo-desc-extra {
-    font-size: 11px;
+    font-size: var(--fs-11);
     color: var(--text-tertiary);
     font-style: italic;
     margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .articolo-item.not-found .articolo-desc {
-    color: #7a3e3e;
+    color: var(--accent-red);
 }
 
 .phantom-info {
-    font-size: 10px;
-    color: #7d7d86;
+    font-size: var(--fs-11);
+    color: var(--text-tertiary);
     margin-top: 2px;
     font-style: italic;
 }
 
-/* ---- QUANTITY CONTROLS ---- */
+/* =========================================================
+   QUANTITY CONTROLS
+   ========================================================= */
 
 .articolo-qty {
     display: flex;
@@ -202,58 +245,127 @@
     gap: 6px;
 }
 
-.qty-btn {
+/* If articolo-qty is used as a compact inline control, remove bg/borders for its children */
+.articolo-qty .qty-btn,
+.articolo-qty .qty-btn-gruppo,
+.articolo-qty .qty-input,
+.articolo-qty .qty-input-gruppo {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    color: var(--text-primary);
+}
+
+.articolo-qty .qty-btn:hover,
+.articolo-qty .qty-btn-gruppo:hover {
+    background: transparent;
+    border-color: transparent;
+    color: var(--text-primary);
+}
+
+.articolo-qty .qty-btn:active,
+.articolo-qty .qty-btn-gruppo:active {
+    transform: none;
+}
+
+.articolo-qty .qty-input:focus,
+.articolo-qty .qty-input-gruppo:focus {
+    outline: none;
+    box-shadow: none;
+    border: 0;
+}
+
+.qty-btn,
+.qty-btn-gruppo {
     width: 22px;
     height: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: none;
-    border: none;
-    color: #222;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-primary);
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
     padding: 0;
     margin: 0;
-    transition: color 0.15s ease, transform 0.1s ease;
+    transition: all var(--transition-base);
 }
 
-.qty-btn:hover {
-    color: #0a84ff;
+.qty-btn:hover,
+.qty-btn-gruppo:hover {
+    background: var(--bg-elevated);
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
 }
 
-.qty-btn:active {
+.qty-btn:active,
+.qty-btn-gruppo:active {
     transform: scale(0.92);
-    color: #000;
 }
 
-.qty-input {
+.qty-input,
+.qty-input-gruppo {
     width: 42px;
     text-align: center;
-    padding: 2px 0 4px 0;
-    background: transparent;
-    border: none;
-    border-bottom: 0px solid rgba(0, 0, 0, 0.1);
-    color: #222;
-    font-size: 13px;
+    padding: 4px 2px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-size: var(--fs-13);
     font-weight: 500;
-    transition: border-color 0.15s ease;
+    transition: all var(--transition-base);
     margin: 0;
     -moz-appearance: textfield;
 }
 
 .qty-input::-webkit-inner-spin-button,
-.qty-input::-webkit-outer-spin-button {
+.qty-input::-webkit-outer-spin-button,
+.qty-input-gruppo::-webkit-inner-spin-button,
+.qty-input-gruppo::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
 
-.qty-input:focus {
+.qty-input:focus,
+.qty-input-gruppo:focus {
     outline: none;
-    border-bottom: 1px solid #0a84ff;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(184, 156, 255, 0.1);
 }
 
+:root[data-theme="light"] .qty-input:focus,
+:root[data-theme="light"] .qty-input-gruppo:focus {
+    box-shadow: 0 0 0 2px rgba(10, 132, 255, 0.1);
+}
+
+/* Quantity inputs for assiemi */
+.qty-input-assieme {
+    width: 50px;
+    padding: 4px 6px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: var(--fs-11);
+    text-align: center;
+    color: var(--text-primary);
+    transition: all var(--transition-base);
+}
+
+.qty-input-assieme:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(184, 156, 255, 0.1);
+}
+
+:root[data-theme="light"] .qty-input-assieme:focus {
+    box-shadow: 0 0 0 2px rgba(10, 132, 255, 0.1);
+}
+
+/* Remove button */
 .btn-remove {
     width: 22px;
     height: 22px;
@@ -262,13 +374,13 @@
     justify-content: center;
     background: none;
     border: none;
-    color: #c62828;
+    color: var(--text-tertiary);
     font-size: 15px;
     font-weight: 500;
     cursor: pointer;
     padding: 0;
     margin: 0;
-    transition: color 0.15s ease, transform 0.1s ease;
+    transition: all var(--transition-base);
 }
 
 .btn-remove:hover {
@@ -277,5 +389,92 @@
 
 .btn-remove:active {
     transform: scale(0.9);
-    color: #c62828;
+}
+
+/* =========================================================
+   GRUPPO ASSIEME
+   ========================================================= */
+
+.gruppo-assieme {
+    background: rgba(184, 156, 255, 0.08);
+    border: 1px solid var(--accent-lavender);
+    border-radius: var(--radius-sm);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+:root[data-theme="light"] .gruppo-assieme {
+    background: rgba(10, 132, 255, 0.08);
+    border-color: var(--accent-blue);
+}
+
+/* =========================================================
+   SELECTED ITEMS (for modals)
+   ========================================================= */
+
+.selected-items,
+.selected-target {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+    min-height: 40px;
+    padding: 8px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+}
+
+.selected-item,
+.selected-item-with-qty {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: var(--fs-12);
+}
+
+.selected-item-code,
+.selected-item-code-assieme {
+    font-family: 'IBM Plex Mono', 'SF Mono', monospace;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.selected-item-desc,
+.selected-item-desc-assieme {
+    color: var(--text-secondary);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* =========================================================
+   OP SELECT
+   ========================================================= */
+
+.op-select-assieme {
+    padding: 4px 8px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: var(--fs-11);
+    color: var(--text-primary);
+    cursor: pointer;
+    min-width: 140px;
+    transition: all var(--transition-base);
+}
+
+.op-select-assieme:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 2px rgba(184, 156, 255, 0.1);
+}
+
+:root[data-theme="light"] .op-select-assieme:focus {
+    box-shadow: 0 0 0 2px rgba(10, 132, 255, 0.1);
 }

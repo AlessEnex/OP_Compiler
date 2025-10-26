@@ -1,5 +1,5 @@
 /* =========================================================
-   SOTTOASSIEMI - Card, Header, Content
+   SOTTOASSIEMI - Cards, Headers, Content
    ========================================================= */
 
 .sottoassiemi-container {
@@ -8,12 +8,16 @@
     gap: 6px;
 }
 
+/* =========================================================
+   SOTTOASSIEME CARD
+   ========================================================= */
+
 .sottoassieme-card {
     background: var(--bg-secondary);
-    border: 0px solid var(--border-color);
+    border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     overflow: hidden;
-    transition: border-color var(--t) var(--ease), background var(--t) var(--ease);
+    transition: all var(--transition-base);
 }
 
 .sottoassieme-card:hover {
@@ -21,12 +25,13 @@
 }
 
 .sottoassieme-card.completed {
-    border-left: 0px solid var(--accent-green);
-    background: rgba(86, 224, 127, 0.459);
+    border-left: 3px solid var(--accent-green);
+    /* use blue tint matching --accent-green (#5cd6ff) */
+    background: rgba(92, 214, 255, 0.05);
 }
 
 .sottoassieme-card.completed:hover {
-    background: rgba(86, 224, 127, 0.459);
+    background: rgba(92, 214, 255, 0.08);
 }
 
 .sottoassieme-card.completed .sottoassieme-header,
@@ -34,7 +39,24 @@
     background: transparent;
 }
 
-/* ---- HEADER ---- */
+/* Selected state */
+.sottoassieme-card.selected {
+    border-color: var(--accent-primary);
+    background: rgba(184, 156, 255, 0.05);
+}
+
+:root[data-theme="light"] .sottoassieme-card.selected {
+    background: rgba(10, 132, 255, 0.05);
+}
+
+/* Filtered hidden */
+.sottoassieme-card.filtered-hidden {
+    display: none;
+}
+
+/* =========================================================
+   SOTTOASSIEME HEADER
+   ========================================================= */
 
 .sottoassieme-header {
     display: flex;
@@ -42,16 +64,18 @@
     gap: 12px;
     padding: 10px 14px;
     min-height: 44px;
-    cursor: pointer;
     user-select: none;
-    background: rgba(28, 28, 30, 0.144);
+    background: var(--bg-tertiary);
     backdrop-filter: blur(8px);
+    transition: background var(--transition-base);
+    cursor: pointer;
 }
 
 .sottoassieme-header:hover {
     background: var(--bg-elevated);
 }
 
+/* Toggle icon */
 .sottoassieme-toggle {
     width: 20px;
     height: 20px;
@@ -59,7 +83,7 @@
     place-items: center;
     color: var(--text-tertiary);
     font-size: 14px;
-    transition: transform var(--t) var(--ease), color var(--t) var(--ease);
+    transition: all var(--transition-base);
 }
 
 .sottoassieme-toggle.expanded {
@@ -67,14 +91,16 @@
     color: var(--text-secondary);
 }
 
+/* Code */
 .sottoassieme-code {
-    font-family: "SF Mono", "Menlo", "Monaco", "Courier New", monospace;
+    font-family: 'IBM Plex Mono', 'SF Mono', monospace;
     font-weight: 700;
     font-size: var(--fs-12);
-    color: #111;
+    color: var(--text-primary);
     min-width: 110px;
 }
 
+/* Description */
 .sottoassieme-desc {
     flex: 1;
     color: var(--text-primary);
@@ -82,48 +108,56 @@
     font-weight: 600;
 }
 
-.btn-delete {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 4px 6px;
-    background: none;
-    border: none;
-    color: #444;
-    font-size: 13px;
-    font-weight: 500;
+/* =========================================================
+   SOTTOASSIEME CHECKBOX
+   ========================================================= */
+
+.sottoassieme-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 50%;
     cursor: pointer;
-    transition: color 0.15s ease, transform 0.1s ease;
+    position: relative;
+    transition: all var(--transition-base);
+    background: var(--bg-secondary);
+    margin: 0;
+    flex-shrink: 0;
+    z-index: 10;
+    pointer-events: auto;
 }
 
-.icon-trash {
-    width: 14px;
-    height: 14px;
-    stroke: var(--accent-blue);
-    stroke-width: 1.8;
-    fill: none;
-    transition: stroke 0.15s ease, transform 0.15s ease;
+.sottoassieme-checkbox:hover {
+    border-color: var(--accent-primary);
 }
 
-.btn-delete:hover {
-    color: var(--accent-red);
+.sottoassieme-checkbox:checked {
+    border-color: var(--accent-primary);
+    background: var(--accent-primary);
 }
 
-.btn-delete:hover .icon-trash {
-    stroke: var(--accent-red);
-    transform: scale(1.05);
+.sottoassieme-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50%;
 }
 
-.btn-delete:active {
-    transform: scale(0.95);
-}
-
-/* ---- CONTENT ---- */
+/* =========================================================
+   SOTTOASSIEME CONTENT
+   ========================================================= */
 
 .sottoassieme-content {
     display: none;
     padding: var(--spacing-lg);
-    background: var(--bg-tertiary);
+    background: var(--bg-primary);
     border-top: 1px solid var(--border-color);
 }
 
@@ -131,18 +165,20 @@
     display: block;
 }
 
-/* ---- MULTI SELECT ---- */
+/* =========================================================
+   MULTI SELECT BAR
+   ========================================================= */
 
 .multi-select-bar {
     position: sticky;
     top: 60px;
     z-index: 50;
-    background: var(--accent-blue);
+    background: var(--accent-primary);
     color: white;
     padding: 12px 24px;
     border-radius: var(--radius-md);
     margin-bottom: 16px;
-    box-shadow: 0 2px 8px rgba(10, 132, 255, 0.2);
+    box-shadow: var(--shadow-md);
     animation: slideDown 0.2s ease-out;
 }
 
@@ -165,7 +201,7 @@
 }
 
 .selected-count {
-    font-size: 14px;
+    font-size: var(--fs-14);
     font-weight: 600;
 }
 
@@ -174,78 +210,20 @@
     gap: 12px;
 }
 
-.btn-deselect {
-    padding: 6px 14px;
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    border-radius: 6px;
-    color: white;
-    font-size: 13px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s ease;
+/* =========================================================
+   ICON TRASH (SVG)
+   ========================================================= */
+
+.icon-trash {
+    width: 14px;
+    height: 14px;
+    stroke: var(--accent-primary);
+    stroke-width: 1.8;
+    fill: none;
+    transition: all var(--transition-base);
 }
 
-.btn-deselect:hover {
-    background: rgba(255, 255, 255, 0.3);
-}
-
-.btn-delete-multiple {
-    padding: 6px 14px;
-    background: white;
-    border: none;
-    border-radius: 6px;
-    color: var(--accent-blue);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.15s ease;
-}
-
-.btn-delete-multiple:hover {
-    background: #f0f0f0;
-    transform: translateY(-1px);
-}
-
-/* ---- CHECKBOX CUSTOM (DOT BLU) ---- */
-
-.sottoassieme-checkbox {
-    appearance: none;
-    -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--border-color);
-    border-radius: 50%;
-    cursor: pointer;
-    position: relative;
-    transition: all 0.2s ease;
-    background: var(--bg-secondary);
-    margin: 0;
-}
-
-.sottoassieme-checkbox:hover {
-    border-color: var(--accent-blue);
-}
-
-.sottoassieme-checkbox:checked {
-    border-color: var(--accent-blue);
-    background: var(--accent-blue);
-}
-
-.sottoassieme-checkbox:checked::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 8px;
-    height: 8px;
-    background: white;
-    border-radius: 50%;
-}
-
-/* Card selezionata */
-.sottoassieme-card.selected {
-    border-color: var(--accent-blue);
-    background: rgba(10, 132, 255, 0.05);
+.btn-delete:hover .icon-trash {
+    stroke: var(--accent-red);
+    transform: scale(1.05);
 }

@@ -1,5 +1,5 @@
 /* =========================================================
-   BASE - Reset, Tokens, Typography, Layout
+   BASE - Reset, Foundation Styles
    ========================================================= */
 
 /* Reset */
@@ -7,56 +7,6 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-/* ---- TOKENS ---- */
-:root {
-    /* Neutrals */
-    --bg-primary: #f6f7f8;
-    --bg-secondary: #ffffff;
-    --bg-tertiary: #f1f2f4;
-    --bg-elevated: #fbfbfc;
-
-    /* Text */
-    --text-primary: #0f1113;
-    --text-secondary: #5a616b;
-    --text-tertiary: #8b929c;
-
-    /* Strokes */
-    --border-color: #e6e8ec;
-    --separator: #dfe3e8;
-
-    /* Accents */
-    --accent-blue: #0a84ff;
-    --accent-green: #34c759;
-    --accent-red: #ff3b30;
-
-
-
-    /* Spacing & Radius */
-    --spacing-xs: 4px;
-    --spacing-sm: 8px;
-    --spacing-md: 12px;
-    --spacing-lg: 16px;
-    --spacing-xl: 24px;
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 14px;
-
-    /* Type scale */
-    --fs-12: 12px;
-    --fs-13: 13px;
-    --fs-14: 14px;
-    --fs-15: 15px;
-    --fs-16: 16px;
-    --fs-18: 18px;
-    --fs-20: 20px;
-    --fs-22: 22px;
-    --fs-24: 24px;
-
-    /* Motion */
-    --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
-    --t: 180ms;
 }
 
 html,
@@ -67,17 +17,19 @@ body {
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Inter, Roboto, system-ui, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, system-ui, sans-serif;
     line-height: 1.45;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     letter-spacing: 0.005em;
 }
 
 /* Links */
 a {
-    color: inherit;
+    color: var(--accent-primary);
     text-decoration: none;
+    transition: color var(--transition-base);
 }
 
 a:hover {
@@ -85,9 +37,9 @@ a:hover {
     text-decoration-thickness: 1px;
 }
 
-/* Focus */
+/* Focus - WCAG AA compliant */
 :focus-visible {
-    outline: 2px solid rgba(0, 0, 0, 0.15);
+    outline: 2px solid var(--accent-primary);
     outline-offset: 2px;
 }
 
@@ -102,10 +54,10 @@ a:hover {
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #cfd5db;
+    background: var(--border-color);
     border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: #bcc3cb;
+    background: var(--separator);
 }

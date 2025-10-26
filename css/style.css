@@ -25,7 +25,7 @@
 
   /* Accents consentiti */
   --accent-blue:#0a84ff;    /* SOLO: elimina riga */
-  --accent-green:#34c759;   /* SOLO: conferma sottoassieme */
+  --accent-green:#5cd6ff;   /* SOLO: conferma sottoassieme (changed) */
 
   /* Spazi & Raggi */
   --spacing-xs:4px; --spacing-sm:8px; --spacing-md:12px;
@@ -128,14 +128,14 @@ a:hover{text-decoration:underline;text-decoration-thickness:1px}
 }
 .sottoassieme-card:hover{border-color:var(--separator)}
 .sottoassieme-card.completed{
-  /* conferma = verde (consentito) */
+  /* conferma = custom blue */
   border-left:0px solid var(--accent-green);
-  background: rgba(86, 224, 127, 0.459);
+  background: rgba(92, 214, 255, 0.459);
 }
 
-/* Mantieni il verde anche in hover */
+/* Mantieni il colore anche in hover */
 .sottoassieme-card.completed:hover {
-  background: rgba(86, 224, 127, 0.459);
+  background: rgba(92, 214, 255, 0.459);
 }
 
 /* L'header non deve diventare bianco in hover quando completed */
@@ -277,7 +277,19 @@ a:hover{text-decoration:underline;text-decoration-thickness:1px}
   transition:border-color var(--t) var(--ease), background var(--t) var(--ease)
 }
 
-.search-input:focus{background:var(--bg-elevated);border-color:#d6d9df}
+.search-input:focus{
+  background: var(--bg-elevated);
+  outline: none;
+  box-shadow: none;
+  /* rimuoviamo tutti i bordi e mostriamo solo la linea inferiore */
+  border: 0;
+  border-bottom: 2px solid var(--accent-blue);
+  /* Mantieni gli angoli superiori arrotondati, ma rendi piatte le estremità inferiori della linea */
+  border-radius: var(--radius-sm);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  transition: border-bottom var(--t) var(--ease), background var(--t) var(--ease);
+}
 
 .search-results{max-height:280px;overflow-y:auto}
 .search-result-item{
@@ -963,7 +975,7 @@ a:hover{text-decoration:underline;text-decoration-thickness:1px}
     transform: scale(0.98);
 }
 
-/* ==================== FILTRO SOTTOASSIEMI ==================== */
+
 /* ==================== FILTRO SOTTOASSIEMI - ULTRA MINIMAL ==================== */
 
 .filter-bar {
@@ -1105,4 +1117,25 @@ a:hover{text-decoration:underline;text-decoration-thickness:1px}
 
 .sottoassieme-card.filtering-out {
     animation: fadeOut 0.2s ease-out forwards;
+}
+
+
+/* BOTTONE DIPENDENZE */
+
+.btn-calculate-deps {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  background: transparent;
+  border: 1px solid var(--border-color, #e6e8ec);
+  border-radius: 8px;
+  color: var(--text-primary, #0f1113);
+  cursor: pointer;
+}
+
+.icon-link {
+  width: 18px;
+  height: 18px;
+  display: block;
 }

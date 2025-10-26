@@ -62,8 +62,7 @@ class BomManager {
     removeSottoassieme(progressivo) {
         this.sottoassiemi = this.sottoassiemi.filter(sa => sa.progressivo !== progressivo);
         
-        // ✅ Ricalcola le dipendenze dopo aver eliminato il sottoassieme
-        this.recalculateAllDependencies();
+        // ❌ RIMOSSO: Nessun ricalcolo automatico
     }
 
     // Trova un articolo nel database (o restituisce info minime se non trovato)
@@ -136,8 +135,8 @@ class BomManager {
         // È un articolo normale
         this.addArticoloInternal(progressivoSottoassieme, item, quantita);
         
-        // Applica dipendenze
-        this.checkAndApplyDependencies(item.codice, quantita, progressivoSottoassieme);
+        // ❌ RIMOSSO: Le dipendenze NON si applicano più automaticamente
+        // L'utente userà il bottone "Calcola Dipendenze" manualmente
         
         return true;
     }
@@ -168,24 +167,146 @@ class BomManager {
 
 
     // Controlla e applica dipendenze per un articolo appena aggiunto
-    // Controlla e applica dipendenze per un articolo appena aggiunto
-    // Applica tutte le dipendenze (calcola somme totali)
+    // ❌ DEPRECATO: Non più utilizzato
+    // Le dipendenze si calcolano SOLO manualmente con il bottone
     checkAndApplyDependencies(codiceArticolo, quantita, progressivoSottoassiemeOrigine) {
-        console.log('🔍 Controllo dipendenze per:', codiceArticolo);
-        
-        // Dopo aver modificato un articolo, ricalcola TUTTE le dipendenze
-        this.recalculateAllDependencies();
+        // Funzione vuota - mantenuta per compatibilità
     }
 
     // Aggiorna le quantità degli articoli generati da dipendenze
     // Aggiorna le quantità degli articoli generati da dipendenze
     updateDependenciesQuantity(codiceArticoloTrigger, nuovaQuantita, progressivoSottoassieme) {
-        // Ricalcola tutte le dipendenze
-        this.recalculateAllDependencies();
+        // ❌ RIMOSSO: Nessun ricalcolo automatico
+        // L'utente dovrà usare il bottone "Calcola Dipendenze"
     }
 
 
+    // ✅ NUOVO: Calcola dipendenze MANUALMENTE (chiamato solo dal bottone)
+    // Restituisce una lista di "proposte" senza applicarle
+    calculateDependenciesPreview() {
+        const proposals = [];
+        
+        this.dipendenze.forEach(dep => {
+            let targetsList = [];
+            
+            if (dep.targets && Array.isArray(dep.targets)) {
+                targetsList = dep.targets;
+            } else if (dep.target) {
+                targetsList = [{ codice: dep.target, ratio: dep.ratio || 1 }];
+            } else {
+                return;
+            }
+            
+            targetsList.forEach(targetItem => {
+                const targetCode = targetItem.codice;
+                const targetRatio = targetItem.ratio || 1;
+                
+                if (dep.sottoassieme_destinazione === 'SAME') {
+                    // Per SAME, processa ogni sottoassieme separatamente
+                    this.sottoassiemi.forEach(sottoassieme => {
+                        let quantitaLocale = 0;
+                        const triggersFound = [];
+                        
+                        sottoassieme.articoli.forEach(articolo => {
+                            if (dep.trigger.includes(articolo.codice)) {
+                                quantitaLocale += articolo.quantita;
+                                triggersFound.push({
+                                    codice: articolo.codice,
+                                    quantita: articolo.quantita
+                                });
+                            }
+                        });
+                        
+                        if (quantitaLocale > 0) {
+                            const quantitaRichiesta = quantitaLocale * targetRatio;
+                            
+                            // Controlla se target già presente
+                            const existing = sottoassieme.articoli.find(a => 
+                                a.codice === targetCode && 
+                                a.phantomPadre === null
+                            );
+                            
+                            const quantitaPresente = existing ? existing.quantita : 0;
+                            const quantitaDelta = quantitaRichiesta - quantitaPresente; // Può essere negativo!
+                            
+                            proposals.push({
+                                depId: dep.id,
+                                depNome: dep.nome,
+                                triggerOP: generateOPCode(this.anno, this.commessa, sottoassieme.progressivo),
+                                triggersFound: triggersFound,
+                                targetOP: generateOPCode(this.anno, this.commessa, sottoassieme.progressivo),
+                                targetCodice: targetCode,
+                                targetQuantita: quantitaDelta, // Delta invece di assoluto
+                                quantitaRichiesta: quantitaRichiesta,
+                                quantitaPresente: quantitaPresente,
+                                targetSottoassieme: sottoassieme.progressivo,
+                                ratio: targetRatio,
+                                exists: !!existing
+                            });
+                        }
+                    });
+                } else {
+                    // Destinazione fissa
+                    let quantitaTotale = 0;
+                    const triggersFound = [];
+                    const triggersByOP = {};
+                    
+                    this.sottoassiemi.forEach(sottoassieme => {
+                        sottoassieme.articoli.forEach(articolo => {
+                            if (dep.trigger.includes(articolo.codice)) {
+                                quantitaTotale += articolo.quantita;
+                                const opCode = generateOPCode(this.anno, this.commessa, sottoassieme.progressivo);
+                                if (!triggersByOP[opCode]) {
+                                    triggersByOP[opCode] = [];
+                                }
+                                triggersByOP[opCode].push({
+                                    codice: articolo.codice,
+                                    quantita: articolo.quantita
+                                });
+                            }
+                        });
+                    });
+                    
+                    if (quantitaTotale > 0) {
+                        const quantitaRichiesta = quantitaTotale * targetRatio;
+                        const targetSA = this.sottoassiemi.find(sa => 
+                            sa.progressivo === dep.sottoassieme_destinazione
+                        );
+                        
+                        if (targetSA) {
+                            const existing = targetSA.articoli.find(a => 
+                                a.codice === targetCode && 
+                                a.phantomPadre === null
+                            );
+                            
+                            const quantitaPresente = existing ? existing.quantita : 0;
+                            const quantitaDelta = quantitaRichiesta - quantitaPresente; // Può essere negativo!
+                            
+                            proposals.push({
+                                depId: dep.id,
+                                depNome: dep.nome,
+                                triggersByOP: triggersByOP,
+                                targetOP: generateOPCode(this.anno, this.commessa, targetSA.progressivo),
+                                targetCodice: targetCode,
+                                targetQuantita: quantitaDelta, // Delta invece di assoluto
+                                quantitaRichiesta: quantitaRichiesta,
+                                quantitaPresente: quantitaPresente,
+                                targetSottoassieme: targetSA.progressivo,
+                                ratio: targetRatio,
+                                exists: !!existing
+                            });
+                        }
+                    }
+                }
+            });
+        });
+        
+        return proposals;
+    }
+
     // Ricalcola tutte le dipendenze in base agli articoli attivi
+    // ⚠️ ATTENZIONE: Questa funzione NON viene più chiamata automaticamente
+    // Viene usata SOLO dal sistema di calcolo manuale
     recalculateAllDependencies() {
         console.log('🔄 Ricalcolo dipendenze...');
         
@@ -279,9 +400,14 @@ class BomManager {
                 );
                 
                 if (existing) {
-                    // Aggiorna quantità
-                    existing.quantita = quantitaRichiesta;
-                    console.log(`✏️ Aggiornato ${targetCode} in ${sottoassieme.codice}: ${quantitaRichiesta}x`);
+                    // Se l'articolo è stato modificato manualmente dall'utente, non sovrascriverlo
+                    if (existing.isManualOverride === true) {
+                        console.log(`⏸️ Mantengo override manuale per ${targetCode} in ${sottoassieme.codice}: ${existing.quantita}x`);
+                    } else {
+                        // Aggiorna quantità
+                        existing.quantita = quantitaRichiesta;
+                        console.log(`✏️ Aggiornato ${targetCode} in ${sottoassieme.codice}: ${quantitaRichiesta}x`);
+                    }
                 } else {
                     // Crea nuovo
                     const articoloTarget = this.findArticolo(targetCode);
@@ -290,7 +416,8 @@ class BomManager {
                         quantita: quantitaRichiesta,
                         phantomPadre: null,
                         variantePadre: null,
-                        isFromDependency: true
+                        isFromDependency: true,
+                        isManualOverride: false
                     });
                     console.log(`✅ Aggiunto ${targetCode} in ${sottoassieme.codice}: ${quantitaRichiesta}x`);
                 }
@@ -301,6 +428,11 @@ class BomManager {
             sottoassieme.articoli = sottoassieme.articoli.filter(a => {
                 if (a.isFromDependency === true && a.phantomPadre === null) {
                     if (!requiredCodes.includes(a.codice)) {
+                        // Se l'utente ha fatto override manuale, non rimuoviamo l'articolo automaticamente
+                        if (a.isManualOverride === true) {
+                            console.log(`✋ Mantengo ${a.codice} in ${sottoassieme.codice} per override manuale`);
+                            return true;
+                        }
                         console.log(`🗑️ Rimosso ${a.codice} da ${sottoassieme.codice} (non più richiesto)`);
                         return false;
                     }
@@ -315,9 +447,9 @@ class BomManager {
 
 
     // Rimuove gli articoli generati da dipendenze quando rimuovi il trigger
+    // ❌ DEPRECATO: Non più utilizzato
     removeDependenciesArticles(codiceArticoloTrigger) {
-        // Ricalcola tutte le dipendenze
-        this.recalculateAllDependencies();
+        // Funzione vuota - mantenuta per compatibilità
     }
 
     // Rimuove un articolo da un sottoassieme
@@ -333,8 +465,7 @@ class BomManager {
             return false;
         });
         
-        // Ricalcola le dipendenze dopo la rimozione
-        this.removeDependenciesArticles(codiceArticolo);
+        // ❌ RIMOSSO: Nessun ricalcolo automatico
     }
 
     // Modifica quantità di un articolo
@@ -355,6 +486,13 @@ class BomManager {
         articolo.quantita += delta;
         if (articolo.quantita < 1) articolo.quantita = 1;
         
+        // Se l'articolo è stato generato dalle dipendenze e l'utente lo modifica
+        // consideralo come override manuale per preservare la modifica dall'overwrite automatico
+        if (articolo.isFromDependency === true) {
+            articolo.isManualOverride = true;
+            articolo.manualOverrideAt = Date.now();
+        }
+
         // Aggiorna le dipendenze se questo articolo è un trigger
         this.updateDependenciesQuantity(codiceArticolo, articolo.quantita, progressivoSottoassieme);
     }
@@ -375,7 +513,15 @@ class BomManager {
         if (!articolo) return;
 
         articolo.quantita = Math.max(1, parseInt(quantita) || 1);
-        
+
+        // Se l'articolo è stato generato dalle dipendenze e l'utente lo modifica
+        // consideralo come override manuale per preservare la modifica dall'overwrite automatico
+        if (articolo.isFromDependency === true) {
+            articolo.isManualOverride = true;
+            // salvo anche il timestamp per eventuali debug/UX
+            articolo.manualOverrideAt = Date.now();
+        }
+
         // Aggiorna le dipendenze se questo articolo è un trigger
         this.updateDependenciesQuantity(codiceArticolo, articolo.quantita, progressivoSottoassieme);
     }
@@ -547,4 +693,17 @@ class BomManager {
 
     // Modifica export per gestire assiemi (gli articoli sono già espansi)
     // Il metodo exportFlat() esistente funziona già correttamente!
+
+    // Rimuove il flag di override manuale per un articolo specifico (utile in UI)
+    clearManualOverride(progressivoSottoassieme, codiceArticolo) {
+        const sottoassieme = this.sottoassiemi.find(sa => sa.progressivo === progressivoSottoassieme);
+        if (!sottoassieme) return;
+
+        const articolo = sottoassieme.articoli.find(a => a.codice === codiceArticolo && a.phantomPadre === null);
+        if (!articolo) return;
+
+        articolo.isManualOverride = false;
+        delete articolo.manualOverrideAt;
+        console.log(`🔓 Manual override cleared for ${codiceArticolo} in ${sottoassieme.codice}`);
+    }
 }

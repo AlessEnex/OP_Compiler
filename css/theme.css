@@ -1,10 +1,15 @@
 /* =========================================================
+   THEME SYSTEM - BoM Builder
+   Professional Design System with proper contrast ratios
+   ========================================================= */
+
+/* =========================================================
    FONTS
    ========================================================= */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
 /* =========================================================
-   THEME DARK – Graphite Lavender (DEFAULT)
+   THEME DARK - Graphite Lavender (DEFAULT)
    ========================================================= */
 :root[data-theme="dark"],
 :root {
@@ -14,7 +19,7 @@
   --bg-tertiary: #1d1e21;
   --bg-elevated: #222327;
   
-  /* Typography */
+  /* Typography - WCAG AA compliant */
   --text-primary: #e3e5e9;
   --text-secondary: #a2a4aa;
   --text-tertiary: #6e7279;
@@ -24,10 +29,19 @@
   --separator: #34363a;
   
   /* Accents */
+  --accent-primary: #b89cff;
   --accent-blue: #b89cff;
   --accent-lavender: #b89cff;
-  --accent-green: #34c759;
+  /* Changed to custom blue requested */
+  --accent-green: #5cd6ff;
   --accent-red: #ff3b30;
+  --accent-yellow: #ffcc00;
+  
+  /* Codici colori (Trigger/Target) */
+  --trigger-bg: #fff3c4;
+  --trigger-text: #000000;
+  --target-bg: #b3ecff;
+  --target-text: #000000;
   
   /* Shadows */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
@@ -38,6 +52,28 @@
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 12px;
+  
+  /* Font sizes */
+  --fs-11: 11px;
+  --fs-12: 12px;
+  --fs-13: 13px;
+  --fs-14: 14px;
+  --fs-15: 15px;
+  --fs-16: 16px;
+  --fs-18: 18px;
+  --fs-20: 20px;
+  --fs-22: 22px;
+  
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+  
+  /* Transitions */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 0.25s var(--ease);
 }
 
 /* =========================================================
@@ -50,7 +86,7 @@
   --bg-tertiary: #f1f2f4;
   --bg-elevated: #ffffff;
   
-  /* Typography */
+  /* Typography - WCAG AA compliant */
   --text-primary: #1d1d1f;
   --text-secondary: #6e6e73;
   --text-tertiary: #86868b;
@@ -60,10 +96,19 @@
   --separator: #e5e5ea;
   
   /* Accents */
+  --accent-primary: #0a84ff;
   --accent-blue: #0a84ff;
   --accent-lavender: #8e66ff;
-  --accent-green: #34c759;
+  /* Changed to custom blue requested */
+  --accent-green: #5cd6ff;
   --accent-red: #ff3b30;
+  --accent-yellow: #ffcc00;
+  
+  /* Codici colori (Trigger/Target) - light theme */
+  --trigger-bg: #fff3c4;
+  --trigger-text: #000000;
+  --target-bg: #b3ecff;
+  --target-text: #000000;
   
   /* Shadows */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
@@ -81,15 +126,20 @@ body {
   margin: 0;
   padding: 0;
   transition: background 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Monospace for codes */
 code,
 .mono,
 .articolo-code,
+.sottoassieme-code,
 .assieme-id,
-.dep-code {
+.dep-code,
+.result-code {
   font-family: 'IBM Plex Mono', 'SF Mono', 'Consolas', monospace;
+  color: var(--text-primary);
 }
 
 /* =========================================================
@@ -105,11 +155,11 @@ textarea,
 .sottoassieme-card,
 .assieme-card {
   transition: 
-    background 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-    color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    background var(--transition-base),
+    border-color var(--transition-base),
+    color var(--transition-base),
     transform 0.2s ease,
-    box-shadow 0.25s ease;
+    box-shadow var(--transition-base);
 }
 
 button:hover:not(:disabled),
@@ -122,19 +172,19 @@ button:active:not(:disabled),
   transform: translateY(0);
 }
 
+/* Focus states - WCAG compliant */
 input:focus,
 select:focus,
 textarea:focus {
   outline: none;
-  border-color: var(--accent-lavender);
-  box-shadow: 0 0 0 3px rgba(184, 156, 255, 0.1);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(184, 156, 255, 0.15);
 }
 
 :root[data-theme="light"] input:focus,
 :root[data-theme="light"] select:focus,
 :root[data-theme="light"] textarea:focus {
-  border-color: var(--accent-blue);
-  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.1);
+  box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.15);
 }
 
 /* =========================================================
@@ -162,15 +212,14 @@ textarea:focus {
 .theme-toggle-slider {
   width: 16px;
   height: 16px;
-  background: var(--accent-lavender);
+  background: var(--accent-primary);
   border-radius: 50%;
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.3s var(--ease);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 :root[data-theme="light"] .theme-toggle-slider {
   transform: translateX(24px);
-  background: var(--accent-blue);
 }
 
 .theme-toggle-icon {
@@ -231,251 +280,11 @@ textarea:focus {
    SELECTION STYLING
    ========================================================= */
 ::selection {
-  background: var(--accent-lavender);
+  background: var(--accent-primary);
   color: var(--bg-primary);
 }
 
 :root[data-theme="light"] ::selection {
   background: var(--accent-blue);
   color: white;
-}
-
-/* =========================================================
-   OVERRIDES - Fix colori hardcoded nei CSS legacy
-   ========================================================= */
-
-/* Articolo code */
-.articolo-code,
-.sottoassieme-code,
-.result-code {
-  color: var(--text-primary) !important;
-  font-family: 'IBM Plex Mono', 'SF Mono', monospace !important;
-}
-
-/* Quantity inputs e buttons */
-.qty-input,
-.qty-input-gruppo,
-input[type="number"] {
-  background: var(--bg-tertiary) !important;
-  color: var(--text-primary) !important;
-  border-color: var(--border-color) !important;
-}
-
-.qty-btn,
-.qty-btn-gruppo {
-  background: var(--bg-tertiary) !important;
-  color: var(--text-primary) !important;
-  border-color: var(--border-color) !important;
-}
-
-.qty-btn:hover,
-.qty-btn-gruppo:hover {
-  background: var(--bg-elevated) !important;
-}
-
-/* Header e barra superiore */
-.app-header,
-.header,
-.setup-header,
-.assiemi-header {
-  background: var(--bg-secondary) !important;
-  border-bottom-color: var(--border-color) !important;
-}
-
-.header-content {
-  background: transparent !important;
-}
-
-/* Header text elements */
-.app-header h1,
-.header h1,
-.assiemi-header h1 {
-  color: var(--text-primary) !important;
-}
-
-.subtitle,
-.header-subtitle {
-  color: var(--text-secondary) !important;
-}
-
-/* Commessa info */
-.commessa-info,
-.commessa-info span {
-  color: var(--text-primary) !important;
-  background: var(--bg-tertiary) !important;
-}
-
-/* Filter input */
-.filter-input,
-.filter-input-sottoassiemi {
-  background: var(--bg-tertiary) !important;
-  color: var(--text-primary) !important;
-  border-color: var(--border-color) !important;
-}
-
-.filter-input::placeholder,
-.filter-input-sottoassiemi::placeholder {
-  color: var(--text-tertiary) !important;
-}
-
-/* Buttons generici */
-button:not(.theme-toggle) {
-  color: var(--text-primary) !important;
-}
-
-.btn-primary,
-.btn-primary-dep {
-  background: var(--accent-lavender) !important;
-  color: var(--bg-primary) !important;
-}
-
-:root[data-theme="light"] .btn-primary,
-:root[data-theme="light"] .btn-primary-dep {
-  background: var(--accent-blue) !important;
-  color: white !important;
-}
-
-.btn-export,
-.btn-export-dep,
-.btn-import-csv {
-  background: var(--bg-tertiary) !important;
-  color: var(--text-primary) !important;
-  border-color: var(--border-color) !important;
-}
-
-.btn-export:hover,
-.btn-export-dep:hover,
-.btn-import-csv:hover {
-  background: var(--bg-elevated) !important;
-  border-color: var(--separator) !important;
-}
-
-/* Articolo items e cards */
-.articolo-item,
-.sottoassieme-card,
-.assieme-card {
-  background: var(--bg-secondary) !important;
-  border-color: var(--border-color) !important;
-}
-
-.articolo-item:hover,
-.sottoassieme-card:hover,
-.assieme-card:hover {
-  background: var(--bg-tertiary) !important;
-}
-
-/* Articolo description */
-.articolo-desc {
-  color: var(--text-secondary) !important;
-}
-
-.articolo-desc-extra,
-.result-desc-extra {
-  color: var(--text-tertiary) !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-}
-
-/* Gruppo assieme */
-.gruppo-assieme {
-  background: rgba(184, 156, 255, 0.05) !important;
-  border-color: var(--accent-lavender) !important;
-}
-
-:root[data-theme="light"] .gruppo-assieme {
-  background: rgba(10, 132, 255, 0.05) !important;
-  border-color: var(--accent-blue) !important;
-}
-
-/* Stats e contatori */
-.stat-item,
-.dep-stats .stat-item {
-  color: var(--text-secondary) !important;
-}
-
-.stat-item strong {
-  color: var(--text-primary) !important;
-}
-
-/* Modals */
-.modal-overlay {
-  background: rgba(0, 0, 0, 0.7) !important;
-  align-items: center !important;
-  justify-content: center !important;
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  z-index: 1000 !important;
-}
-
-.modal-overlay[style*="display: flex"],
-.modal-overlay[style*="display: block"] {
-  display: flex !important;
-}
-
-:root[data-theme="light"] .modal-overlay {
-  background: rgba(0, 0, 0, 0.4) !important;
-}
-
-.modal-content {
-  background: var(--bg-secondary) !important;
-  color: var(--text-primary) !important;
-  border-color: var(--border-color) !important;
-  max-width: 90vw !important;
-  max-height: 90vh !important;
-  overflow-y: auto !important;
-  margin: auto !important;
-}
-
-.modal-title {
-  color: var(--text-primary) !important;
-}
-
-.modal-subtitle {
-  color: var(--text-secondary) !important;
-}
-
-/* Tables */
-table {
-  background: var(--bg-secondary) !important;
-}
-
-th {
-  background: var(--bg-tertiary) !important;
-  color: var(--text-primary) !important;
-  border-color: var(--border-color) !important;
-}
-
-td {
-  color: var(--text-primary) !important;
-  border-color: var(--border-color) !important;
-}
-
-tr:hover {
-  background: var(--bg-tertiary) !important;
-}
-
-/* Empty states */
-.empty-state {
-  color: var(--text-tertiary) !important;
-}
-
-/* Links */
-a {
-  color: var(--accent-lavender) !important;
-}
-
-:root[data-theme="light"] a {
-  color: var(--accent-blue) !important;
-}
-
-.btn-back {
-  color: var(--text-secondary) !important;
-}
-
-.btn-back:hover {
-  color: var(--text-primary) !important;
 }

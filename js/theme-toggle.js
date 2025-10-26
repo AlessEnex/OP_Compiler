@@ -39,6 +39,12 @@ class ThemeManager {
     }
 
     insertToggleButton() {
+        // Se esiste già un toggle nel DOM, non inserirne un altro
+        if (document.querySelector('.theme-toggle')) {
+            // Assicuriamoci che abbia il listener corretto
+            this.attachToggleListener();
+            return;
+        }
         // Cerca l'header o il nav
         const header = document.querySelector('header') || 
                       document.querySelector('nav') || 

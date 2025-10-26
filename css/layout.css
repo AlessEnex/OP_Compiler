@@ -2,7 +2,9 @@
    LAYOUT - Header, Main App, Setup Screen
    ========================================================= */
 
-/* ---- MAIN APP ---- */
+/* =========================================================
+   MAIN APP
+   ========================================================= */
 
 .main-app {
     min-height: 100vh;
@@ -18,13 +20,15 @@
     width: 100%;
 }
 
-/* ---- HEADER ---- */
+/* =========================================================
+   HEADER
+   ========================================================= */
 
 .app-header {
     position: sticky;
     top: 0;
     z-index: 100;
-    background: rgba(255, 255, 255, 0.8);
+    background: var(--bg-secondary);
     backdrop-filter: saturate(140%) blur(16px);
     border-bottom: 1px solid var(--border-color);
     padding: 10px var(--spacing-xl);
@@ -51,6 +55,7 @@
     font-weight: 700;
     letter-spacing: -0.02em;
     margin: 0;
+    color: var(--text-primary);
 }
 
 .header-right {
@@ -59,14 +64,24 @@
     gap: 16px;
 }
 
+/* Commessa info */
 .commessa-info {
     display: flex;
     gap: var(--spacing-lg);
     font-size: var(--fs-13);
     color: var(--text-secondary);
+    background: var(--bg-tertiary);
+    padding: 8px 16px;
+    border-radius: var(--radius-sm);
 }
 
-/* ---- SETUP CARD ---- */
+.commessa-info span {
+    color: var(--text-primary);
+}
+
+/* =========================================================
+   SETUP CONTAINER
+   ========================================================= */
 
 .setup-container {
     min-height: 100vh;
@@ -74,6 +89,17 @@
     align-items: center;
     justify-content: center;
     padding: var(--spacing-xl);
+    position: relative;
+}
+
+/* Setup header - links top-right */
+.setup-header {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    z-index: 10;
+    display: flex;
+    gap: 12px;
 }
 
 .setup-card {
@@ -83,17 +109,19 @@
     background: var(--bg-secondary);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
 }
 
 .setup-card h1 {
-    font-size: var(--fs-22, 22px);
+    font-size: var(--fs-22);
     font-weight: 700;
     letter-spacing: -0.02em;
     text-align: center;
     margin-bottom: var(--spacing-xl);
+    color: var(--text-primary);
 }
 
-/* Setup footer con link dipendenze */
+/* Setup footer with links */
 .setup-footer {
     margin-top: 24px;
     padding-top: 20px;
@@ -109,13 +137,13 @@
     font-size: var(--fs-13);
     font-weight: 500;
     text-decoration: none;
-    transition: color 0.18s ease, transform 0.18s ease;
+    transition: all var(--transition-base);
     padding: 8px 16px;
     border-radius: var(--radius-sm);
 }
 
 .link-setup-dipendenze:hover {
-    color: var(--accent-blue);
+    color: var(--accent-primary);
     background: var(--bg-tertiary);
     text-decoration: none;
     transform: translateX(2px);
@@ -125,39 +153,43 @@
     transform: translateX(0);
 }
 
-/* Header nella home page */
-.setup-header {
-    position: absolute;
-    top: 24px;
-    right: 24px;
-    z-index: 10;
-    display: flex;
-    gap: 12px;
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+    .header-content {
+        flex-wrap: wrap;
+    }
+
+    .header-left {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .commessa-info {
+        flex-direction: column;
+        gap: var(--spacing-xs);
+    }
+
+    .setup-card {
+        padding: 24px;
+    }
+
+    .setup-header {
+        top: 16px;
+        right: 16px;
+        flex-direction: column;
+        gap: 8px;
+    }
 }
 
-.link-dipendenze-home {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    color: var(--text-secondary);
-    font-size: var(--fs-14);
-    font-weight: 500;
-    text-decoration: none;
-    transition: color 0.18s ease, transform 0.18s ease;
-    padding: 8px 16px;
-    background: none;
-    border: 0px solid var(--border-color);
-    border-radius: var(--radius-sm);
-}
+@media (max-width: 480px) {
+    .header-content h1 {
+        font-size: var(--fs-16);
+    }
 
-.link-dipendenze-home:hover {
-    color: var(--text-primary);
-    background: none;
-    border-color: var(--separator);
-    text-decoration: none;
-    transform: translateX(2px);
-}
-
-.link-dipendenze-home:active {
-    transform: translateX(0);
+    .app-main {
+        padding: var(--spacing-md);
+    }
 }

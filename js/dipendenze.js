@@ -278,7 +278,7 @@ function createDepCard(dep, index) {
         codeContainer.className = 'code-with-desc';
         
         const codeSpan = document.createElement('span');
-        codeSpan.className = 'dep-code';
+        codeSpan.className = 'dep-code dep-trigger';
         codeSpan.textContent = code;
         
         const desc = articoliMap[String(code)];
@@ -341,7 +341,7 @@ function createDepCard(dep, index) {
         targetContainer.className = 'code-with-desc';
         
         const targetSpan = document.createElement('span');
-        targetSpan.className = 'dep-code';
+        targetSpan.className = 'dep-code dep-target';
         targetSpan.textContent = `${targetItem.codice} (×${targetItem.ratio})`;
         
         const targetDesc = articoliMap[String(targetItem.codice)];
